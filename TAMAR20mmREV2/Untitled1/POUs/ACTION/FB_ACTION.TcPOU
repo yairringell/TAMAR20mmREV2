@@ -1,0 +1,439 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_ACTION" Id="{77b4196e-a6d2-4735-ae2e-ed59e88b663e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ACTION
+VAR_INPUT
+	sNAME: STRING;
+	PIST: REFERENCE TO FB_PISTON;
+	aLIFT:REFERENCE TO FB_Axis;
+	aXY:REFERENCE TO FB_Axis;
+	bSTART_OPEN:BOOL;
+	bSTART_CLOSE:BOOL;
+	bSTART_HOMING:BOOL;
+	iHOME_STATE:INT:=98;
+	iOPEN_STATE:INT:=98;
+	iCLOSE_STATE:INT:=98;
+	bHOME_ALL:BOOL;
+	bOPEN_ALL:BOOL;
+	bCLOSE_ALL:BOOL;
+	tACTION:TON;
+	rACTION_TIMEOUT:TIME:=T#20S;
+	tHOMING:TON;
+	rHOMING_TIMEOUT: TIME:=T#20S;
+	tOPEN:TON;
+	rOPEN_TIMEOUT: TIME:=T#20S;
+	tCLOSE:TON;
+	rCLOSE_TIMEOUT: TIME:=T#20S;
+END_VAR
+VAR_OUTPUT
+	sACTION_STATE:STRING:='UNINIT';
+	bSTART_ACTION:BOOL;
+	iACTION_STATE:INT:=98;
+	bACTION_ERROR:BOOL;
+	bALL_HOMED:BOOL;
+	bALL_OPENED:BOOL;
+	bALL_CLOSED:BOOL;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[mACTION_STATE_MACHINE();
+IF bALL_HOMED THEN
+	IF NOT aLIFT.bHOMED OR NOT aXY.bHOMED THEN
+		bALL_HOMED:=FALSE;
+		iACTION_STATE:=98;
+	END_IF
+END_IF
+ ]]></ST>
+    </Implementation>
+    <Action Name="aACTION_ERROR" Id="{18ded634-2282-4c0c-b5aa-75bbf974bd96}">
+      <Implementation>
+        <ST><![CDATA[gEventType:= 'action Alarm'; 
+gEventSeverity:= 'Error';
+
+gEventName:= sNAME;
+IF iACTION_STATE=2  THEN
+	gEventText:='action XY homing';
+	gEventIdentity:=5001;
+END_IF
+IF iACTION_STATE=2  THEN
+	gEventText:='action LIFT homing';
+	gEventIdentity:=5002;
+END_IF
+IF iACTION_STATE=5  THEN
+	gEventText:='action PISTON homing';
+	gEventIdentity:=5003;
+END_IF
+//---------------------------------------------------
+IF iACTION_STATE=14  THEN
+	gEventText:='action XY opening';
+	gEventIdentity:=5011;
+END_IF
+IF iACTION_STATE=12  THEN
+	gEventText:='action LIFT opening';
+	gEventIdentity:=5012;
+END_IF
+IF iACTION_STATE=10  THEN
+	gEventText:='action PISTON opening';
+	gEventIdentity:=5013;
+END_IF
+//---------------------------------------------------
+IF iACTION_STATE=32  THEN
+	gEventText:='action XY closing';
+	gEventIdentity:=5021;
+END_IF
+IF iACTION_STATE=34  THEN
+	gEventText:='action LIFT closing';
+	gEventIdentity:=5022;
+END_IF
+IF iACTION_STATE=35  THEN
+	gEventText:='action PISTON closing';
+	gEventIdentity:=5023;
+END_IF
+fbEventLogger.mAdd();]]></ST>
+      </Implementation>
+    </Action>
+    <Method Name="mACTION_STATE_MACHINE" Id="{3aea7e34-a6ec-43c3-a03c-1c552f7c93cb}">
+      <Declaration><![CDATA[METHOD mACTION_STATE_MACHINE : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[tACTION(IN:= bSTART_ACTION, PT:=rACTION_TIMEOUT , Q=> , ET=> );
+
+CASE iACTION_STATE OF
+	
+	1://======================================  HOME ALL	
+		//HOME XY
+		sACTION_STATE:='HOMING ALL XY';
+		bHOME_ALL:=FALSE; bALL_HOMED:=FALSE;bALL_OPENED:=FALSE;bOPEN_ALL:=FALSE;bALL_CLOSED:=FALSE;bCLOSE_ALL:=FALSE;
+		aXY.bHome:=TRUE;
+		bSTART_ACTION:=TRUE;
+		iACTION_STATE:=2; 
+	2:
+		aXY.bHome:=FALSE;
+		IF aXY.bHOMED THEN
+			bSTART_ACTION:=FALSE;
+			iACTION_STATE:=3;
+		END_IF
+		IF aXY.bSTATE_ERROR THEN
+			iACTION_STATE:=99;
+			aACTION_ERROR();
+			bSTART_ACTION:=FALSE;
+			bACTION_ERROR:=TRUE;
+		END_IF
+			
+	3://HOME LIFT
+		sACTION_STATE:='HOMING ALL LIFT';
+		aLIFT.bHome:=TRUE;
+		bSTART_ACTION:=TRUE;
+		iACTION_STATE:=4;
+	4:
+		aLIFT.bHome:=FALSE;
+		IF aLIFT.bHOMED THEN
+			bSTART_ACTION:=FALSE;
+			iACTION_STATE:=5;
+		END_IF
+		IF aLIFT.bSTATE_ERROR THEN
+			aACTION_ERROR();
+			iACTION_STATE:=99;
+			bSTART_ACTION:=FALSE;
+			bACTION_ERROR:=TRUE;
+		END_IF
+	5://HOME PISTON
+		sACTION_STATE:='HOMING ALL PISTON';
+		bSTART_ACTION:=TRUE;
+		PIST.bOPEN_SWR:=FALSE;
+		IF PIST.bCLOSED THEN
+			bSTART_ACTION:=FALSE;
+			iACTION_STATE:=100;
+			bALL_HOMED:=TRUE;
+		END_IF
+		IF PIST.bERROR THEN
+			aACTION_ERROR();
+			iACTION_STATE:=99;
+			bSTART_ACTION:=FALSE;
+			bACTION_ERROR:=TRUE;
+		END_IF
+	10://===================================== OPENING ALL
+		//OPEN PISTON
+		bHOME_ALL:=FALSE; bALL_HOMED:=FALSE;bALL_OPENED:=FALSE;bOPEN_ALL:=FALSE;bALL_CLOSED:=FALSE;bCLOSE_ALL:=FALSE;
+		sACTION_STATE:='OPENING ALL PISTON';
+		bSTART_ACTION:=TRUE;
+		PIST.bOPEN_SWR:=TRUE;
+		IF PIST.bOPENED THEN
+			bSTART_ACTION:=FALSE;
+			iACTION_STATE:=11;
+		END_IF
+		IF PIST.bERROR THEN
+			aACTION_ERROR();
+			iACTION_STATE:=99;
+			bSTART_ACTION:=FALSE;
+			bACTION_ERROR:=TRUE;
+		END_IF
+	11://OPEN LIFT
+		sACTION_STATE:='OPENING ALL LIFT';
+		aLIFT.bOPEN:=TRUE;
+		bSTART_ACTION:=TRUE;
+		iACTION_STATE:=12;
+	12:
+		aLIFT.bOPEN:=FALSE;
+		IF aLIFT.bOPENED THEN
+			bSTART_ACTION:=FALSE;
+			iACTION_STATE:=13;
+		END_IF
+		IF aLIFT.bSTATE_ERROR THEN
+			aACTION_ERROR();
+			iACTION_STATE:=99;
+			bSTART_ACTION:=FALSE;
+			bACTION_ERROR:=TRUE;
+		END_IF
+	13://OPEN ALL XY
+		sACTION_STATE:='OPENING ALL XY';
+		aXY.bOPEN:=TRUE;
+		bSTART_ACTION:=TRUE;
+		iACTION_STATE:=14; 
+	14:
+		aXY.bOPEN:=FALSE;
+		IF aXY.bOPENED THEN
+			bSTART_ACTION:=FALSE;
+			bALL_OPENED:=TRUE;
+			iACTION_STATE:=20;
+		END_IF
+		IF aXY.bSTATE_ERROR THEN
+			aACTION_ERROR();
+			iACTION_STATE:=99;
+			bSTART_ACTION:=FALSE;
+			bACTION_ERROR:=TRUE;
+		END_IF	
+
+	20:// ==================================== OPENED
+		sACTION_STATE:='OPENED';
+		IF bCLOSE_ALL THEN
+			iACTION_STATE:=30;
+			bACTION_ERROR:=FALSE;
+		END_IF
+		IF bHOME_ALL THEN
+			iACTION_STATE:=1;
+			bACTION_ERROR:=FALSE;
+		END_IF
+		
+	30://===================================== CLOSING ALL XY
+		sACTION_STATE:='CLOSING ALL XY';
+		bHOME_ALL:=FALSE; bALL_HOMED:=FALSE;bALL_OPENED:=FALSE;bOPEN_ALL:=FALSE;bALL_CLOSED:=FALSE;bCLOSE_ALL:=FALSE;
+		aXY.bCLOSE:=TRUE;
+		bSTART_ACTION:=TRUE;
+		iACTION_STATE:=32; 
+	32:
+		aXY.bCLOSE:=FALSE;
+		IF aXY.bCLOSED THEN
+			bSTART_ACTION:=FALSE;
+			iACTION_STATE:=33;
+		END_IF
+		IF aXY.bSTATE_ERROR THEN
+			aACTION_ERROR();
+			iACTION_STATE:=99;
+			bSTART_ACTION:=FALSE;
+			bACTION_ERROR:=TRUE;
+		END_IF	
+	33://HOME LIFT
+		sACTION_STATE:='CLOSING ALL LIFT';
+		aLIFT.bCLOSE:=TRUE;
+		bSTART_ACTION:=TRUE;
+		iACTION_STATE:=34;
+	34:
+		aLIFT.bCLOSE:=FALSE;
+		IF aLIFT.bCLOSED THEN
+			bSTART_ACTION:=FALSE;
+			iACTION_STATE:=35;
+		END_IF
+		IF aLIFT.bSTATE_ERROR THEN
+			aACTION_ERROR();
+			iACTION_STATE:=99;
+			bSTART_ACTION:=FALSE;
+			bACTION_ERROR:=TRUE;
+		END_IF
+	35://CLOSE ALL PISTON
+		sACTION_STATE:='CLOSING ALL PISTON';
+		bSTART_ACTION:=TRUE;
+		PIST.bOPEN_SWR:=FALSE;
+		IF PIST.bCLOSED THEN
+			bSTART_ACTION:=FALSE;
+			iACTION_STATE:=40;
+			bALL_CLOSED:=TRUE;
+		END_IF
+		IF PIST.bERROR THEN
+			aACTION_ERROR();
+			iACTION_STATE:=99;
+			bSTART_ACTION:=FALSE;
+			bACTION_ERROR:=TRUE;
+		END_IF 
+	40:// ==================================== CLOSED
+		sACTION_STATE:='CLOSED';
+		IF bOPEN_ALL THEN
+			iACTION_STATE:=10;
+			bACTION_ERROR:=FALSE;
+		END_IF		
+		IF bHOME_ALL THEN
+			iACTION_STATE:=1;
+			bACTION_ERROR:=FALSE;
+		END_IF
+		
+	98://===================================== UNINIT
+		sACTION_STATE:='UNINIT';
+		IF bHOME_ALL THEN
+			iACTION_STATE:=1;
+			bACTION_ERROR:=FALSE;
+		END_IF
+		
+	99://===================================== ERROR
+		sACTION_STATE:='ERROR';
+		IF bHOME_ALL THEN
+			iACTION_STATE:=1;
+			bACTION_ERROR:=FALSE;
+		END_IF
+	
+	100://===================================== HOMED
+		sACTION_STATE:='HOMED';
+		IF bHOME_ALL THEN
+			iACTION_STATE:=1;
+			bACTION_ERROR:=FALSE;
+		END_IF	
+		IF bOPEN_ALL THEN
+			iACTION_STATE:=10;
+			bACTION_ERROR:=FALSE;
+		END_IF
+	
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_ACTION">
+      <LineId Id="11" Count="0" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="125" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ACTION.aACTION_ERROR">
+      <LineId Id="2" Count="7" />
+      <LineId Id="19" Count="2" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="22" Count="2" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="26" Count="11" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="39" Count="11" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ACTION.mACTION_STATE_MACHINE">
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="23" Count="5" />
+      <LineId Id="205" Count="0" />
+      <LineId Id="208" Count="0" />
+      <LineId Id="227" Count="0" />
+      <LineId Id="209" Count="0" />
+      <LineId Id="206" Count="1" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="35" Count="2" />
+      <LineId Id="39" Count="6" />
+      <LineId Id="228" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="47" Count="1" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="51" Count="5" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="229" Count="1" />
+      <LineId Id="213" Count="1" />
+      <LineId Id="211" Count="1" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="204" Count="0" />
+      <LineId Id="98" Count="4" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="216" Count="0" />
+      <LineId Id="231" Count="0" />
+      <LineId Id="217" Count="2" />
+      <LineId Id="215" Count="0" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="106" Count="10" />
+      <LineId Id="232" Count="0" />
+      <LineId Id="117" Count="2" />
+      <LineId Id="104" Count="1" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="125" Count="6" />
+      <LineId Id="140" Count="0" />
+      <LineId Id="132" Count="2" />
+      <LineId Id="233" Count="0" />
+      <LineId Id="135" Count="2" />
+      <LineId Id="121" Count="1" />
+      <LineId Id="120" Count="0" />
+      <LineId Id="138" Count="0" />
+      <LineId Id="142" Count="2" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="200" Count="2" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="203" Count="0" />
+      <LineId Id="147" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="150" Count="10" />
+      <LineId Id="234" Count="0" />
+      <LineId Id="161" Count="15" />
+      <LineId Id="235" Count="0" />
+      <LineId Id="177" Count="11" />
+      <LineId Id="148" Count="0" />
+      <LineId Id="220" Count="0" />
+      <LineId Id="236" Count="0" />
+      <LineId Id="221" Count="2" />
+      <LineId Id="189" Count="0" />
+      <LineId Id="194" Count="0" />
+      <LineId Id="190" Count="3" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="196" Count="2" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="199" Count="0" />
+      <LineId Id="195" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="68" Count="1" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="70" Count="1" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="79" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="77" Count="1" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="87" Count="1" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
