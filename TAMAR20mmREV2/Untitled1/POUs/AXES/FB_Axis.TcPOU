@@ -134,6 +134,11 @@ END_IF
 fbEventLogger.mAdd();]]></ST>
       </Implementation>
     </Action>
+    <Action Name="aHOME" Id="{2753041d-96aa-4b92-9b43-4f8425e2fb2c}">
+      <Implementation>
+        <ST><![CDATA[bHOME:=TRUE;]]></ST>
+      </Implementation>
+    </Action>
     <Method Name="clear_cmd_req" Id="{c115c33f-8377-4dd1-8142-a1b93e7b6e59}">
       <Declaration><![CDATA[METHOD clear_cmd_req : BOOL
 VAR_INPUT
@@ -3083,6 +3088,28 @@ CASE iAXIS_STATE OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
+    <Method Name="mMOVE_ABS" Id="{3559b2d7-32c9-42ec-b6cc-cc5f3405c2cb}">
+      <Declaration><![CDATA[METHOD mMOVE_ABS : BOOL
+VAR_INPUT
+	movement:REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[rPOS:=movement;
+bMoveAbs:=TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="mMOVE_REL" Id="{8e9a154f-3600-4ad6-9689-4039e7b20e16}">
+      <Declaration><![CDATA[METHOD mMOVE_REL : BOOL
+VAR_INPUT
+	movement:REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Dist:=movement;
+bMoveRel:=TRUE;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="FB_Axis">
       <LineId Id="241" Count="1" />
       <LineId Id="252" Count="4" />
@@ -3095,6 +3122,9 @@ END_CASE]]></ST>
       <LineId Id="21" Count="0" />
       <LineId Id="26" Count="2" />
       <LineId Id="25" Count="0" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Axis.aHOME">
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="FB_Axis.clear_cmd_req">
@@ -3206,6 +3236,14 @@ END_CASE]]></ST>
       <LineId Id="261" Count="0" />
       <LineId Id="76" Count="0" />
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Axis.mMOVE_ABS">
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Axis.mMOVE_REL">
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

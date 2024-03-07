@@ -213,6 +213,25 @@ END_CASE
 
 ]]></ST>
     </Implementation>
+    <Action Name="aCLOSE" Id="{b1f4e35c-084e-407f-83a6-be1401f028cb}">
+      <Implementation>
+        <ST><![CDATA[bOPEN_SWR:=FALSE;]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="aHOME" Id="{61cd54f0-31ef-41dc-b8af-f4a12fbdd7c4}">
+      <Implementation>
+        <ST><![CDATA[IF bOPEN_DEFAULT THEN
+	bOPEN_SWR:=TRUE;
+ELSE
+	bOPEN_SWR:=FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="aOPEN" Id="{9c0def1d-a187-4f8f-b5bd-4536b7394c6f}">
+      <Implementation>
+        <ST><![CDATA[bOPEN_SWR:=TRUE;]]></ST>
+      </Implementation>
+    </Action>
     <Action Name="aPISTON_ERROR" Id="{1b759e5b-d5dc-4ee8-b4b9-3114018bbeff}">
       <Implementation>
         <ST><![CDATA[gEventType:= 'piston Alarm'; 
@@ -236,6 +255,11 @@ IF pist_STATE=E_PISTON_STATE.opened THEN
 	gEventIdentity:=1004;
 END_IF
 fbEventLogger.mAdd();]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="aRESET" Id="{04605110-f2be-4812-bdc3-32e8c11c9c1a}">
+      <Implementation>
+        <ST><![CDATA[bLOCAL_RESET:=TRUE;]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="FB_PISTON">
@@ -276,6 +300,17 @@ fbEventLogger.mAdd();]]></ST>
       <LineId Id="148" Count="7" />
       <LineId Id="2" Count="0" />
     </LineIds>
+    <LineIds Name="FB_PISTON.aCLOSE">
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_PISTON.aHOME">
+      <LineId Id="1" Count="1" />
+      <LineId Id="4" Count="1" />
+      <LineId Id="3" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_PISTON.aOPEN">
+      <LineId Id="1" Count="0" />
+    </LineIds>
     <LineIds Name="FB_PISTON.aPISTON_ERROR">
       <LineId Id="2" Count="3" />
       <LineId Id="7" Count="0" />
@@ -291,6 +326,9 @@ fbEventLogger.mAdd();]]></ST>
       <LineId Id="17" Count="1" />
       <LineId Id="22" Count="0" />
       <LineId Id="6" Count="0" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_PISTON.aRESET">
       <LineId Id="1" Count="0" />
     </LineIds>
   </POU>

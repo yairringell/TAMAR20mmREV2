@@ -93,11 +93,39 @@
     <Compile Include="POUs\PISTONS\ST_PISTON.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\PISTONS\vPISTONS.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="POUs\PISTONS\vPISTON.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="POUs\STATIONS\FB_FEEDER.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\STATIONS\FB_STATION.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\STATIONS\STATION_CYCLE.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\STATIONS\vSTATIONS.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="Visualization Manager.TcVMO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\vCOMM.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\vMACHINE.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISU_TASK.TcTTO">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -107,6 +135,7 @@
     <Folder Include="POUs\ACTION" />
     <Folder Include="POUs\AXES" />
     <Folder Include="POUs\EVENT_LOGGER" />
+    <Folder Include="POUs\STATIONS" />
     <Folder Include="POUs\PISTONS" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />

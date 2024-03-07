@@ -1430,6 +1430,9 @@ External Setpoint Generation:
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
 					<Name>PlcTask</Name>
 				</Task>
+				<Task Id="6" Priority="30" CycleTime="2000000" AmsPort="351" DisableFpExceptions="true" AdtTasks="true">
+					<Name>VISU_TASK</Name>
+				</Task>
 			</Tasks>
 		</System>
 		<Motion>
@@ -1514,6 +1517,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -1667,6 +1671,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -1820,6 +1825,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -1973,6 +1979,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -2065,7 +2072,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{70F04D60-736E-4E14-8B4A-8BF70786744E}" Name="Untitled1" PrjFilePath="Untitled1\Untitled1.plcproj" TmcFilePath="Untitled1\Untitled1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{ADF61998-B82D-C81A-3D2C-EC4624FC55C3}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Untitled1\Untitled1.tmc" TmcHash="{ACD0CBF9-A2CD-C9BE-F2F9-D9FA4BF6C71C}">
 					<Name>Untitled1 Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -2116,9 +2123,19 @@ External Setpoint Generation:
 							<Priority>20</Priority>
 							<CycleTime>10000000</CycleTime>
 						</Context>
+						<Context>
+							<Id>1</Id>
+							<Name>VISU_TASK</Name>
+							<ManualConfig>
+								<OTCID>#x02010060</OTCID>
+							</ManualConfig>
+							<Priority>30</Priority>
+							<CycleTime>200000000</CycleTime>
+						</Context>
 					</Contexts>
 					<TaskPouOids>
 						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+						<TaskPouOid Prio="30" OTCID="#x08502002"/>
 					</TaskPouOids>
 				</Instance>
 			</Project>

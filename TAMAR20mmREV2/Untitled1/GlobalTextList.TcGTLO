@@ -56,6 +56,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"182"</v>
+              <v n="TextDefault">"ESTOP"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"288"</v>
               <v n="TextDefault">"GO ABS"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -121,6 +126,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"569"</v>
+              <v n="TextDefault">"PAUSE"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"425"</v>
               <v n="TextDefault">"POS"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -136,6 +146,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"793"</v>
+              <v n="TextDefault">"POWER BY STRIX"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"507"</v>
               <v n="TextDefault">"R"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -148,6 +163,21 @@
             <o>
               <v n="TextID">"830"</v>
               <v n="TextDefault">"SET"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"487"</v>
+              <v n="TextDefault">"START"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"506"</v>
+              <v n="TextDefault">"STRIX1200"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"245"</v>
+              <v n="TextDefault">"TAMAR 20MM"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

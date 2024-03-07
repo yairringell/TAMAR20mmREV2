@@ -100,7 +100,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[tACTION(IN:= bSTART_ACTION, PT:=rACTION_TIMEOUT , Q=> , ET=> );
+        <ST><![CDATA[ tACTION(IN:= bSTART_ACTION, PT:=rACTION_TIMEOUT , Q=> , ET=> );
 
 CASE iACTION_STATE OF
 	
