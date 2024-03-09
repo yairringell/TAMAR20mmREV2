@@ -57,16 +57,14 @@ END_IF
 
 IF NOT bFIRST_DONE THEN  // ============== check default mode ===============
 	bFIRST_DONE:=TRUE;
-	IF bOPEN_DEFAULT THEN
-		bOPEN_CMD:=TRUE;
-	ELSE
-		bOPEN_CMD:=FALSE;
-	END_IF
+	bOPEN_CMD:=bOPEN_DEFAULT;
 END_IF
 //================================================== UNINIT =====================================================
 CASE pist_STATE OF
 	E_PISTON_STATE.uninit:
 		eSTATE:=E_STATE.uninit;
+		bOPEN_CMD:=bOPEN_DEFAULT;
+		bOPEN_SWR:=bOPEN_DEFAULT;
 		bERROR:=FALSE;
 		IF bOPEN_CMD  THEN
 			bOPEN_VALVE:=TRUE;
@@ -263,7 +261,9 @@ fbEventLogger.mAdd();]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="FB_PISTON">
-      <LineId Id="3" Count="25" />
+      <LineId Id="3" Count="16" />
+      <LineId Id="24" Count="4" />
+      <LineId Id="288" Count="1" />
       <LineId Id="243" Count="0" />
       <LineId Id="29" Count="1" />
       <LineId Id="193" Count="0" />

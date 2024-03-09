@@ -110,7 +110,11 @@
     <Compile Include="POUs\STATIONS\STATION_CYCLE.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\STATIONS\vSTATIONS.TcVIS">
+    <Compile Include="POUs\STATIONS\vFEEDER.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\STATIONS\vSTATION_CONTROLLER.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
