@@ -104,6 +104,9 @@
     <Compile Include="POUs\STATIONS\FB_FEEDER.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\STATIONS\FB_SEPARATE.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\STATIONS\FB_STATION.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -111,6 +114,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\STATIONS\vFEEDER.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\STATIONS\vSEPARATE.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
