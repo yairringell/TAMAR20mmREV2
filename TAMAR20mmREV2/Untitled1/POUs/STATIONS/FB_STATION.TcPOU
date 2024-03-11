@@ -27,10 +27,18 @@ END_VAR
 
 	 ]]></ST>
     </Implementation>
+    <Action Name="aSTART" Id="{3d8a0d55-b032-4923-96f9-b912755fdb9d}">
+      <Implementation>
+        <ST><![CDATA[bSTART:=TRUE;]]></ST>
+      </Implementation>
+    </Action>
     <LineIds Name="FB_STATION">
       <LineId Id="25" Count="1" />
       <LineId Id="31" Count="0" />
       <LineId Id="27" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_STATION.aSTART">
+      <LineId Id="1" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

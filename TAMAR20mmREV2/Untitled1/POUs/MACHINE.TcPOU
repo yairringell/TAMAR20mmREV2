@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MACHINE" Id="{9f31af90-0ebb-4c9c-9f88-fd85631a41cf}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MACHINE
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+IF bMAIN_RESET THEN
+	iMAIN_STATE:=98 ;
+	bMAIN_PAUSE:=FALSE;
+END_IF
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MACHINE">
+      <LineId Id="6" Count="4" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

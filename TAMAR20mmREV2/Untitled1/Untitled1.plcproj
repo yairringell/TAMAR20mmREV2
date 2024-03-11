@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <FileVersion>1.0.0.0</FileVersion>
@@ -73,6 +73,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\GVL_MAIN.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\MACHINE.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
