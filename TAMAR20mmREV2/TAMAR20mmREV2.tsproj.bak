@@ -2071,9 +2071,9 @@ External Setpoint Generation:
 			</NC>
 		</Motion>
 		<Plc>
-			<Project GUID="{70F04D60-736E-4E14-8B4A-8BF70786744E}" Name="Untitled1" PrjFilePath="Untitled1\Untitled1.plcproj" TmcFilePath="Untitled1\Untitled1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Untitled1\Untitled1.tmc" TmcHash="{19884222-FD61-FF5C-84DA-5B25B9CD3FCD}">
-					<Name>Untitled1 Instance</Name>
+			<Project GUID="{70F04D60-736E-4E14-8B4A-8BF70786744E}" Name="TAMAR2MM" PrjFilePath="TAMAR2MM\TAMAR2MM.plcproj" TmcFilePath="TAMAR2MM\TAMAR2MM.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Untitled1\Untitled1.tmc" TmcHash="{365058AA-3217-0105-669A-3331B5421E3D}">
+					<Name>TAMAR2MM Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
@@ -2144,7 +2144,7 @@ External Setpoint Generation:
 	</Project>
 	<Mappings>
 		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
-		<OwnerA Name="TIPC^Untitled1^Untitled1 Instance">
+		<OwnerA Name="TIPC^TAMAR2MM^TAMAR2MM Instance">
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^LIFT1">
 				<Link VarA="PlcTask Inputs^GVL_MAIN.LIFT1.Axis.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^GVL_MAIN.LIFT1.Axis.PlcToNc" VarB="Inputs^FromPlc"/>

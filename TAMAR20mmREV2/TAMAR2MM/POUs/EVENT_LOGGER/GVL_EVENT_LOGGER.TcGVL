@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <GVL Name="GVL_EVENT_LOGGER" Id="{a5c0fcbe-dd56-4362-9405-152b60196d1e}">
+    <Declaration><![CDATA[//{attribute 'qualified_only'}
+VAR_GLOBAL
+	// ================================== error and logs ==============================
+	sError:STRING;
+	gEventType: STRING(255); 
+	gEventSeverity: STRING(255);
+	gEventIdentity: UDINT:=0;
+	gEventText: STRING(255):='Startup Event';
+	gEventName: STRING(255);
+	sEventTime: STRING(255);
+	fbEventLogger: FB_EventLogger;
+	WriteLogToFile:BOOL:=FALSE;
+	sLog:STRING(255);
+	bBuffer_full:BOOL:=FALSE;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>
