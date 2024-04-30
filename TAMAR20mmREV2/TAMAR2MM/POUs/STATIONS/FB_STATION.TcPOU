@@ -18,7 +18,7 @@ VAR
 	bRESET:BOOL;
 	bSTART:BOOL:=FALSE;
 	iSTATION_STATE:INT:=98;;
-	bFIRST_RUB:BOOL:=FALSE;
+	bFIRST_RUN:BOOL:=FALSE;
 END_VAR
 ]]></Declaration>
     <Implementation>

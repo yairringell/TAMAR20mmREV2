@@ -24,16 +24,6 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\ACTION\E_ACTION_STATE.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\ACTION\FB_ACTION.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\ACTION\vACTION.TcVIS">
-      <SubType>Code</SubType>
-      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
-    </Compile>
     <Compile Include="POUs\AXES\AXES_CYCLE.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -44,6 +34,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\AXES\vAXIS.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\AXES\vAXIS_CONTROLLER.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\AXES\AXES_SCREEN.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
@@ -146,7 +144,6 @@
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
-    <Folder Include="POUs\ACTION" />
     <Folder Include="POUs\AXES" />
     <Folder Include="POUs\EVENT_LOGGER" />
     <Folder Include="POUs\STATIONS" />

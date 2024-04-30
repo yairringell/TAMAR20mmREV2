@@ -31,7 +31,7 @@ END_VAR
                       <o>
                         <v n="BoxType">"FB_Axis"</v>
                         <o n="Instance" t="Operand">
-                          <v n="Operand">"LIFT1"</v>
+                          <v n="Operand">"MAIN_CONV"</v>
                           <v n="Type">"FB_Axis"</v>
                           <v n="Comment">""</v>
                           <v n="SymbolComment">""</v>
@@ -255,8 +255,8 @@ END_VAR
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"'LIFT'"</v>
-                              <v n="Type">"STRING(INT#4)"</v>
+                              <v n="Operand">"'MAIN_CONV'"</v>
+                              <v n="Type">"STRING(INT#9)"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
                               <v n="Address">""</v>
@@ -947,7 +947,7 @@ END_VAR
                       <o>
                         <v n="BoxType">"FB_Axis"</v>
                         <o n="Instance" t="Operand">
-                          <v n="Operand">"XY1"</v>
+                          <v n="Operand">"SUP_CONV"</v>
                           <v n="Type">"FB_Axis"</v>
                           <v n="Comment">""</v>
                           <v n="SymbolComment">""</v>
@@ -1171,8 +1171,8 @@ END_VAR
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"'XY1'"</v>
-                              <v n="Type">"STRING(INT#3)"</v>
+                              <v n="Operand">"'SUP_CONV'"</v>
+                              <v n="Type">"STRING(INT#8)"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
                               <v n="Address">""</v>
@@ -1863,7 +1863,7 @@ END_VAR
                       <o>
                         <v n="BoxType">"FB_Axis"</v>
                         <o n="Instance" t="Operand">
-                          <v n="Operand">"XY2"</v>
+                          <v n="Operand">"PRESS1A"</v>
                           <v n="Type">"FB_Axis"</v>
                           <v n="Comment">""</v>
                           <v n="SymbolComment">""</v>
@@ -2087,8 +2087,8 @@ END_VAR
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"'XY2'"</v>
-                              <v n="Type">"STRING(INT#3)"</v>
+                              <v n="Operand">"'PRESS1A'"</v>
+                              <v n="Type">"STRING(INT#7)"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
                               <v n="Address">""</v>
@@ -2779,7 +2779,7 @@ END_VAR
                       <o>
                         <v n="BoxType">"FB_Axis"</v>
                         <o n="Instance" t="Operand">
-                          <v n="Operand">"LIFT2"</v>
+                          <v n="Operand">"PRESS1B"</v>
                           <v n="Type">"FB_Axis"</v>
                           <v n="Comment">""</v>
                           <v n="SymbolComment">""</v>
@@ -3003,8 +3003,8 @@ END_VAR
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"'LIFT2'"</v>
-                              <v n="Type">"STRING(INT#5)"</v>
+                              <v n="Operand">"'PRESS1B'"</v>
+                              <v n="Type">"STRING(INT#7)"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
                               <v n="Address">""</v>

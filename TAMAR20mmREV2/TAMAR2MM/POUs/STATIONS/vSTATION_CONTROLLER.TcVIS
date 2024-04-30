@@ -1276,8 +1276,8 @@
               <n n="BgNamedColor" />
               <v n="BgBmpId">""</v>
               <v n="BgUseBmp">false</v>
-              <v n="BgColor">false</v>
-              <v n="BgUseColor">16777215</v>
+              <v n="BgColor">true</v>
+              <v n="BgUseColor">-1</v>
               <v n="BgUseGradient">false</v>
             </o>
           </o>

@@ -83,13 +83,22 @@ END_IF
 rActPos:=Axis.NcToPlc.ActPos;
 rActVel:=Axis.NcToPlc.ActVelo;
 
+IF RELATIVE.Done AND bMoveRel THEN
+	bMoveRel:=FALSE;
+END_IF
 
+IF MoveAbsolute.Done AND bMoveAbs THEN
+	bMoveAbs:=FALSE;
+END_IF
 
 IF RELATIVE.Busy OR JOG.Busy OR moveAbsolute.busy THEN
 	bBusy:=TRUE;
+	bInpos:=FALSE;
 END_IF
+
 IF NOT RELATIVE.Busy AND NOT JOG.Busy AND NOT moveAbsolute.busy THEN
 	bBusy:=FALSE;
+	bInpos:=TRUE;
 END_IF
 
 IF POWER.error OR RELATIVE.error OR MoveAbsolute.error OR JOG.error THEN
@@ -110,7 +119,7 @@ END_IF
 
 
 CMDs();
-mAXIS_STATE_MACHINE();
+//mAXIS_STATE_MACHINE();
 ]]></ST>
     </Implementation>
     <Action Name="aAXIS_ERROR" Id="{d9bff058-7cd6-4042-808e-812c3696c258}">
@@ -3113,7 +3122,17 @@ bMoveRel:=TRUE;]]></ST>
     <LineIds Name="FB_Axis">
       <LineId Id="241" Count="1" />
       <LineId Id="252" Count="4" />
-      <LineId Id="280" Count="28" />
+      <LineId Id="280" Count="1" />
+      <LineId Id="384" Count="1" />
+      <LineId Id="387" Count="2" />
+      <LineId Id="386" Count="0" />
+      <LineId Id="282" Count="2" />
+      <LineId Id="391" Count="0" />
+      <LineId Id="381" Count="0" />
+      <LineId Id="383" Count="0" />
+      <LineId Id="286" Count="1" />
+      <LineId Id="390" Count="0" />
+      <LineId Id="288" Count="20" />
       <LineId Id="145" Count="0" />
     </LineIds>
     <LineIds Name="FB_Axis.aAXIS_ERROR">

@@ -1276,7 +1276,7 @@ grp_separate2();
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"E_PISTON_TYPE.ONLY_OPEN"</v>
+                              <v n="Operand">"E_PISTON_TYPE.NO_SENSORS"</v>
                               <v n="Type">"E_PISTON_TYPE"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
