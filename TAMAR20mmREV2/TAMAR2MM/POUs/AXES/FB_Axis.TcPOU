@@ -104,9 +104,9 @@ END_IF
 IF POWER.error OR RELATIVE.error OR MoveAbsolute.error OR JOG.error THEN
 	bAXIS_ERROR:=TRUE;
 END_IF
-IF NOT POWER.error AND NOT RELATIVE.error AND NOT MoveAbsolute.error AND NOT JOG.error THEN
-	bAXIS_ERROR:=FALSE;
-END_IF
+//IF NOT POWER.error AND NOT RELATIVE.error AND NOT MoveAbsolute.error AND NOT JOG.error THEN
+//	bAXIS_ERROR:=FALSE;
+//END_IF
 
 IF bRelDone OR  bAbsDone THEN
 	bInPos:=TRUE;
@@ -119,7 +119,7 @@ END_IF
 
 
 CMDs();
-//mAXIS_STATE_MACHINE();
+mAXIS_STATE_MACHINE();
 ]]></ST>
     </Implementation>
     <Action Name="aAXIS_ERROR" Id="{d9bff058-7cd6-4042-808e-812c3696c258}">
@@ -2961,59 +2961,6 @@ CASE iAXIS_STATE OF
 					END_IF
 				END_IF
 			END_IF
-	20://=============================================== OPENING
-		eSTATE:=E_STATE.busy;
-		sAXIS_STATE:= 'OPENING';
-		bSTART_ACTION:=TRUE;
-		bOPENED:=FALSE;bCLOSED:=FALSE;bOPEN:=FALSE;bCLOSE:=FALSE;bHOMED:=FALSE;bHOME:=FALSE;
-		bENABLE:=TRUE;
-		rVel:= jogVEL;
-		bJogPos:=TRUE;
-		IF bLIMIT_OPENED THEN
-			iAXIS_STATE:=21;// to deccell
-			bJogPos:=FALSE;
-			bSTART_ACTION:=FALSE;
-		END_IF
-		IF tACTION.Q THEN
-			bSTART_ACTION:=FALSE;
-			aAXIS_ERROR();
-			iAXIS_STATE:=99;
-			bSTATE_ERROR:=TRUE;
-		END_IF
-		
-		21:
-			sAXIS_STATE:= 'OPEN DECCELERATING';
-			IF Axis.NcToPlc.ActVelo= 0 THEN
-				iAXIS_STATE:=100;
-				bOPENED:=TRUE;
-			END_IF
-	
-	40://=============================================== CLOSING
-		eSTATE:=E_STATE.busy;
-		sAXIS_STATE:= 'CLOSING';
-		bSTART_ACTION:=TRUE;
-		bOPENED:=FALSE;bCLOSED:=FALSE;bOPEN:=FALSE;bCLOSE:=FALSE;bHOMED:=FALSE;bHOME:=FALSE;
-		bENABLE:=TRUE;
-		rVel:= jogVEL;
-		bJogNeg:=TRUE;
-		IF bLIMIT_CLOSED THEN
-			iAXIS_STATE:=41;// to deccell
-			bJogNeg:=FALSE;
-			bSTART_ACTION:=FALSE;
-		END_IF
-		IF tACTION.Q THEN
-			bSTART_ACTION:=FALSE;
-			aAXIS_ERROR();
-			iAXIS_STATE:=99;
-			bSTATE_ERROR:=TRUE;
-		END_IF
-		
-		41:
-			sAXIS_STATE:= 'CLOSE DECCELERATING';
-			IF Axis.NcToPlc.ActVelo= 0 THEN
-				iAXIS_STATE:=100;
-				bCLOSED:=TRUE;
-			END_IF
 	
 	50:	//========================ABSOLUTE=====================
 	eSTATE:=E_STATE.busy;
@@ -3115,8 +3062,11 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Dist:=movement;
-bMoveRel:=TRUE;]]></ST>
+        <ST><![CDATA[
+IF eSTATE:= E_STATE.ready THEN
+	Dist:=movement;
+	bMoveRel:=TRUE;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_Axis">
@@ -3180,33 +3130,6 @@ bMoveRel:=TRUE;]]></ST>
       <LineId Id="77" Count="0" />
       <LineId Id="107" Count="0" />
       <LineId Id="42" Count="0" />
-      <LineId Id="74" Count="0" />
-      <LineId Id="114" Count="0" />
-      <LineId Id="274" Count="0" />
-      <LineId Id="139" Count="0" />
-      <LineId Id="115" Count="0" />
-      <LineId Id="137" Count="0" />
-      <LineId Id="116" Count="4" />
-      <LineId Id="140" Count="0" />
-      <LineId Id="122" Count="1" />
-      <LineId Id="141" Count="0" />
-      <LineId Id="182" Count="0" />
-      <LineId Id="124" Count="0" />
-      <LineId Id="142" Count="0" />
-      <LineId Id="129" Count="2" />
-      <LineId Id="138" Count="0" />
-      <LineId Id="132" Count="0" />
-      <LineId Id="135" Count="0" />
-      <LineId Id="175" Count="0" />
-      <LineId Id="109" Count="0" />
-      <LineId Id="194" Count="0" />
-      <LineId Id="150" Count="1" />
-      <LineId Id="275" Count="0" />
-      <LineId Id="152" Count="11" />
-      <LineId Id="183" Count="0" />
-      <LineId Id="164" Count="7" />
-      <LineId Id="174" Count="0" />
-      <LineId Id="96" Count="0" />
       <LineId Id="214" Count="0" />
       <LineId Id="237" Count="0" />
       <LineId Id="243" Count="0" />
@@ -3261,8 +3184,10 @@ bMoveRel:=TRUE;]]></ST>
       <LineId Id="7" Count="0" />
     </LineIds>
     <LineIds Name="FB_Axis.mMOVE_REL">
+      <LineId Id="12" Count="1" />
       <LineId Id="5" Count="0" />
       <LineId Id="7" Count="0" />
+      <LineId Id="14" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
