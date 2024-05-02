@@ -36,6 +36,7 @@ VAR_INPUT
 	rACTION_TIMEOUT:TIME:=T#10S;
 	jogVEL: REAL;
 	bSTOP:BOOL;
+	SKIP_HOME :BOOL:=TRUE;
 END_VAR
 
 VAR_OUTPUT
@@ -91,12 +92,12 @@ IF MoveAbsolute.Done AND bMoveAbs THEN
 	bMoveAbs:=FALSE;
 END_IF
 
-IF RELATIVE.Busy OR JOG.Busy OR moveAbsolute.busy THEN
+IF RELATIVE.Busy OR JOG.Busy OR moveAbsolute.busy  THEN
 	bBusy:=TRUE;
 	bInpos:=FALSE;
 END_IF
 
-IF NOT RELATIVE.Busy AND NOT JOG.Busy AND NOT moveAbsolute.busy THEN
+IF NOT RELATIVE.Busy AND NOT JOG.Busy AND NOT moveAbsolute.busy AND bENABLE THEN
 	bBusy:=FALSE;
 	bInpos:=TRUE;
 END_IF
@@ -2911,30 +2912,40 @@ END_IF
 
 CASE iAXIS_STATE OF
 	1:// ============================================== HOMING
-		eSTATE:=E_STATE.busy;
-		bSTART_ACTION:=TRUE;
-		sAXIS_STATE:='HOMING - TO SENSOR';
-		bOPENED:=FALSE;bCLOSED:=FALSE;bOPEN:=FALSE;bCLOSE:=FALSE;bHOMED:=FALSE;bHOME:=FALSE;
-		bENABLE:=TRUE;
-		rVel:= jogVEL;
-		IF bHOME_DIR THEN
-			bJogPos:=TRUE;
+		IF SKIP_HOME THEN
+			bHOMED:=TRUE;
+			IF bHOME_DIR THEN
+				iAXIS_STATE:=100;// to ready state
+			ELSE
+				iAXIS_STATE:=100;// to ready state
+			END_IF
 		ELSE
-			bJogNeg:=TRUE;
+			eSTATE:=E_STATE.busy;
+			bSTART_ACTION:=TRUE;
+			sAXIS_STATE:='HOMING - TO SENSOR';
+			bHOMED:=FALSE;bHOME:=FALSE;
+			bENABLE:=TRUE;
+			rVel:= jogVEL;
+			IF bHOME_DIR THEN
+				bJogPos:=TRUE;
+			ELSE
+				bJogNeg:=TRUE;
+			END_IF
+			
+			IF bLIMIT THEN
+				bSTART_ACTION:=FALSE;
+				bJogNeg:=FALSE;
+				bJogPos:=FALSE;
+				iAXIS_STATE:=2;
+			END_IF
+			IF tACTION.Q THEN
+				bSTART_ACTION:=FALSE;
+				aAXIS_ERROR();
+				iAXIS_STATE:=99;
+				bSTATE_ERROR:=TRUE;
+			END_IF
 		END_IF
 		
-		IF bLIMIT THEN
-			bSTART_ACTION:=FALSE;
-			bJogNeg:=FALSE;
-			bJogPos:=FALSE;
-			iAXIS_STATE:=2;
-		END_IF
-		IF tACTION.Q THEN
-			bSTART_ACTION:=FALSE;
-			aAXIS_ERROR();
-			iAXIS_STATE:=99;
-			bSTATE_ERROR:=TRUE;
-		END_IF
 	2://FROM LIMIT
 			sAXIS_STATE:= 'HOMING- FROM SENSOR';
 			IF Axis.NcToPlc.ActVelo= 0 THEN
@@ -2954,10 +2965,8 @@ CASE iAXIS_STATE OF
 					bHOMED:=TRUE;
 					IF bHOME_DIR THEN
 						iAXIS_STATE:=100;// to ready state
-						bOPENED:=TRUE;
 					ELSE
 						iAXIS_STATE:=100;// to ready state
-						bCLOSED:=TRUE;
 					END_IF
 				END_IF
 			END_IF
@@ -2965,7 +2974,7 @@ CASE iAXIS_STATE OF
 	50:	//========================ABSOLUTE=====================
 	eSTATE:=E_STATE.busy;
 	sAXIS_STATE:='MOVING ABSOLUTE';
-	bAbsDone:=FALSE; bOPENED:=FALSE;bCLOSED:=FALSE;bOPEN:=FALSE;bCLOSE:=FALSE;bHOMED:=FALSE;bHOME:=FALSE;
+	bAbsDone:=FALSE; bHOMED:=FALSE;bHOME:=FALSE;
 	IF moveAbsolute.Done OR HALT.Done THEN
 		iAXIS_STATE:=100;
 		bAbsDone:=TRUE;
@@ -2974,7 +2983,7 @@ CASE iAXIS_STATE OF
 	51://========================RELATIVE=====================
 	eSTATE:=E_STATE.busy;
 	sAXIS_STATE:='MOVING RELATIVE';
-	bRelDone:=FALSE; bOPENED:=FALSE;bCLOSED:=FALSE;bOPEN:=FALSE;bCLOSE:=FALSE;bHOMED:=FALSE;bHOME:=FALSE;
+	bRelDone:=FALSE;bHOMED:=FALSE;bHOME:=FALSE;
 	IF RELATIVE.Done OR HALT.Done THEN
 		iAXIS_STATE:=100; 
 		bRelDone:=TRUE;
@@ -2982,13 +2991,13 @@ CASE iAXIS_STATE OF
 	END_IF
 	52://======================= HALT =========================
 	sAXIS_STATE:='HALTING';
-	bHaltDone:=FALSE;bOPENED:=FALSE;bCLOSED:=FALSE;bOPEN:=FALSE;bCLOSE:=FALSE;bHOMED:=FALSE;bHOME:=FALSE;
+	bHaltDone:=FALSE;bHOMED:=FALSE;bHOME:=FALSE;
 	IF HALT.Done THEN
 		iAXIS_STATE:=100;
 		bHaltDone:=TRUE;
 		bHALT:=FALSE;
 	END_IF		
-	98:// ============================================ UNINIT
+	98:// ====================== UNINIT =========================
 		eSTATE:=E_STATE.uninit;
 		sAXIS_STATE:='UNINIT';
 		IF bHOME THEN
@@ -2996,7 +3005,7 @@ CASE iAXIS_STATE OF
 			bSTATE_ERROR:=FALSE;
 		END_IF
 		
-	99://======================================= ERROR 
+	99://====================== ERROR ============================
 		eSTATE:=E_STATE.error;
 		sAXIS_STATE:='AXIS STATE ERROR';
 		bJogNeg:=FALSE;
@@ -3007,15 +3016,9 @@ CASE iAXIS_STATE OF
 			bSTATE_ERROR:=FALSE;
 		END_IF
 		
-	100://=============================================== READY
+	100://==================== READY =============================
 		eSTATE:=E_STATE.ready;
 		sAXIS_STATE:='READY';
-		IF bOPENED THEN
-		sAXIS_STATE:= 'OPENED';
-		END_IF
-		IF bCLOSED THEN
-		sAXIS_STATE:= 'CLOSED';
-		END_IF
 		IF bHOME AND NOT bHOMED THEN
 			iAXIS_STATE:=1;
 			bSTATE_ERROR:=FALSE;
@@ -3063,7 +3066,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-IF eSTATE:= E_STATE.ready THEN
+IF eSTATE= E_STATE.ready THEN
 	Dist:=movement;
 	bMoveRel:=TRUE;
 END_IF]]></ST>
@@ -3108,25 +3111,21 @@ END_IF]]></ST>
       <LineId Id="48" Count="0" />
       <LineId Id="6" Count="0" />
       <LineId Id="10" Count="1" />
-      <LineId Id="273" Count="0" />
-      <LineId Id="60" Count="0" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="25" Count="8" />
-      <LineId Id="103" Count="0" />
-      <LineId Id="34" Count="4" />
-      <LineId Id="104" Count="0" />
-      <LineId Id="181" Count="0" />
-      <LineId Id="39" Count="1" />
+      <LineId Id="317" Count="0" />
+      <LineId Id="285" Count="1" />
+      <LineId Id="288" Count="1" />
+      <LineId Id="283" Count="0" />
+      <LineId Id="292" Count="0" />
+      <LineId Id="294" Count="22" />
+      <LineId Id="293" Count="0" />
+      <LineId Id="284" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="50" Count="9" />
       <LineId Id="41" Count="0" />
       <LineId Id="69" Count="3" />
       <LineId Id="106" Count="0" />
       <LineId Id="108" Count="0" />
-      <LineId Id="78" Count="1" />
-      <LineId Id="83" Count="0" />
-      <LineId Id="80" Count="1" />
-      <LineId Id="84" Count="0" />
+      <LineId Id="78" Count="3" />
       <LineId Id="77" Count="0" />
       <LineId Id="107" Count="0" />
       <LineId Id="42" Count="0" />
@@ -3167,8 +3166,7 @@ END_IF]]></ST>
       <LineId Id="213" Count="0" />
       <LineId Id="195" Count="1" />
       <LineId Id="272" Count="0" />
-      <LineId Id="265" Count="0" />
-      <LineId Id="197" Count="15" />
+      <LineId Id="202" Count="10" />
       <LineId Id="75" Count="0" />
       <LineId Id="254" Count="2" />
       <LineId Id="253" Count="0" />
