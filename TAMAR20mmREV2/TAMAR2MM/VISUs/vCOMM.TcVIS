@@ -68,11 +68,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value">10</v>
+                      <v n="Value">7</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value">399</v>
+                      <v n="Value">398</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -125,11 +125,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value">98</v>
+                      <v n="Value">95</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value">439</v>
+                      <v n="Value">438</v>
                     </o>
                     <o>
                       <v n="Id">493260384L</v>
@@ -154,6 +154,10 @@
                     <o>
                       <v n="Id">2597686782L</v>
                       <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2496894244L</v>
+                      <v n="Value">"NOT bMAIN_HOMED"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -581,11 +585,11 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value">10</v>
+                      <v n="Value">7</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value">649</v>
+                      <v n="Value">648</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
@@ -638,11 +642,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value">99</v>
+                      <v n="Value">96</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value">690</v>
+                      <v n="Value">689</v>
                     </o>
                     <o>
                       <v n="Id">493260384L</v>
@@ -680,7 +684,7 @@
                 <v n="VisualElementIdentifier">"GenElemInst_14"</v>
                 <n n="VisualElementOfflinePaintCommands" />
                 <n n="VisualElementFrameInformation" />
-                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="STSnippetInputAction[]">
+                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="IInputAction[]">
                   <v>OnMouseClick</v>
                   <a cet="STSnippetInputAction">
                     <o>
@@ -2962,6 +2966,7 @@
         <Type n="Guid">System.Guid</Type>
         <Type n="Hashtable">System.Collections.Hashtable</Type>
         <Type n="HotkeyConfiguration">{6b108d46-58af-4e41-a3f4-174d8f160cc4}</Type>
+        <Type n="IInputAction[]">_3S.CoDeSys.VisualElem.IInputAction[], VisualElem, Version=3.5.13.0, Culture=neutral, PublicKeyToken=null</Type>
         <Type n="Int16">System.Int16</Type>
         <Type n="Int32">System.Int32</Type>
         <Type n="Int64">System.Int64</Type>

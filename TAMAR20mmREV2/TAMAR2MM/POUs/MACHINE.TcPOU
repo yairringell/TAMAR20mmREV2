@@ -24,18 +24,20 @@ CASE iMAIN_STATE OF
 		sMAIN_STATE:='HOMING';
 		IF MAIN_CONV.bHOMED THEN
 			iMAIN_STATE:=100;
+			bMAIN_HOMED:=TRUE;
 		END_IF
-	2: //feeder
+	2: //====================================  START ==============================
 		eMAIN_STATE:=E_STATE.busy;
 		sMAIN_STATE:='FEEDING';
 		fbFEEDER.aSTART();
-		IF fbFEEDER.eSTATE= E_STATE.busy THEN
-			iMAIN_STATE:=2;
+		MAIN_CONV.mMOVE_REL(1000);
+		IF fbFEEDER.eSTATE= E_STATE.busy AND MAIN_CONV.eSTATE = E_STATE.busy THEN
+			iMAIN_STATE:=3;
 		END_IF
 	3://wait for feeder
-		IF fbFEEDER.eSTATE= E_STATE.ready THEN
+		IF fbFEEDER.eSTATE= E_STATE.ready AND MAIN_CONV.eSTATE = E_STATE.ready THEN
 			IF NOT bMAIN_PAUSE THEN
-				iMAIN_STATE:=3;
+				iMAIN_STATE:=4;
 			END_IF
 		END_IF
 		IF fbFEEDER.eSTATE= E_STATE.error THEN
@@ -46,7 +48,7 @@ CASE iMAIN_STATE OF
 		sMAIN_STATE:=' SEPARATE1';
 		fbSEPARATE1.aSTART();
 		IF fbSEPARATE1.eSTATE= E_STATE.busy THEN
-			iMAIN_STATE:=4;
+			iMAIN_STATE:=5;
 		END_IF
 	5://wait for separate1
 		IF fbSEPARATE1.eSTATE= E_STATE.ready THEN
@@ -58,17 +60,19 @@ CASE iMAIN_STATE OF
 			iMAIN_STATE:=99;
 		END_IF
 	98://======================================== UNINIT ============================
+		bMAIN_HOMED:=FALSE;
 		eMAIN_STATE:=E_STATE.uninit;
+		MAIN_CONV.aRESET();
 		sMAIN_STATE:='UNINIT';
 		bMAIN_RESET:=FALSE;
 		fbFEEDER.aRESET();
 		fbSEPARATE1.aRESET();
 		//fbPIST3.aRESET();
-		IF fbFEEDER.eSTATE = E_STATE.uninit AND fbSEPARATE1.eSTATE = E_STATE.uninit THEN
+		IF fbFEEDER.eSTATE = E_STATE.uninit AND fbSEPARATE1.eSTATE = E_STATE.uninit AND MAIN_CONV.eSTATE=E_STATE.uninit  THEN
 			iMAIN_STATE:=980;
 		END_IF
 	980: 
-		IF fbFEEDER.eSTATE= E_STATE.ready AND fbSEPARATE1.eSTATE= E_STATE.ready  THEN
+		IF fbFEEDER.eSTATE= E_STATE.ready AND fbSEPARATE1.eSTATE= E_STATE.ready AND MAIN_CONV.eSTATE=E_STATE.uninit  THEN
 			IF bMAIN_HOME THEN
 				iMAIN_STATE:=1;
 			END_IF
@@ -87,7 +91,7 @@ CASE iMAIN_STATE OF
 		sMAIN_STATE:='READY';
 		IF bMAIN_START THEN
 			bMAIN_START:=FALSE;
-			iMAIN_STATE:=1;
+			iMAIN_STATE:=2;
 		END_IF
 		
 END_CASE]]></ST>
@@ -103,11 +107,18 @@ END_CASE]]></ST>
       <LineId Id="124" Count="0" />
       <LineId Id="126" Count="0" />
       <LineId Id="125" Count="0" />
-      <LineId Id="121" Count="2" />
+      <LineId Id="121" Count="1" />
+      <LineId Id="133" Count="0" />
+      <LineId Id="123" Count="0" />
       <LineId Id="119" Count="0" />
-      <LineId Id="18" Count="14" />
+      <LineId Id="18" Count="2" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="21" Count="11" />
       <LineId Id="97" Count="14" />
-      <LineId Id="63" Count="13" />
+      <LineId Id="63" Count="2" />
+      <LineId Id="134" Count="0" />
+      <LineId Id="132" Count="0" />
+      <LineId Id="66" Count="10" />
       <LineId Id="127" Count="1" />
       <LineId Id="77" Count="11" />
       <LineId Id="112" Count="1" />

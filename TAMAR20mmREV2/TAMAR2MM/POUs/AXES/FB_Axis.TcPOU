@@ -94,24 +94,24 @@ END_IF
 
 IF RELATIVE.Busy OR JOG.Busy OR moveAbsolute.busy  THEN
 	bBusy:=TRUE;
-	bInpos:=FALSE;
+	//bInpos:=FALSE;
 END_IF
 
-IF NOT RELATIVE.Busy AND NOT JOG.Busy AND NOT moveAbsolute.busy AND bENABLE THEN
+IF NOT RELATIVE.Busy AND NOT JOG.Busy AND NOT moveAbsolute.busy  THEN
 	bBusy:=FALSE;
-	bInpos:=TRUE;
+	//bInpos:=TRUE;
 END_IF
 
 IF POWER.error OR RELATIVE.error OR MoveAbsolute.error OR JOG.error THEN
 	bAXIS_ERROR:=TRUE;
 END_IF
-//IF NOT POWER.error AND NOT RELATIVE.error AND NOT MoveAbsolute.error AND NOT JOG.error THEN
-//	bAXIS_ERROR:=FALSE;
-//END_IF
+
 
 IF bRelDone OR  bAbsDone THEN
 	bInPos:=TRUE;
 END_IF
+
+
 IF bBusy THEN
 	bInPos:=FALSE;
 	bRelDone:=FALSE;
@@ -147,6 +147,12 @@ fbEventLogger.mAdd();]]></ST>
     <Action Name="aHOME" Id="{2753041d-96aa-4b92-9b43-4f8425e2fb2c}">
       <Implementation>
         <ST><![CDATA[bHOME:=TRUE;]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="aRESET" Id="{7980603b-8539-4565-be54-f55016b0cd49}">
+      <Implementation>
+        <ST><![CDATA[iAXIS_STATE:=98;
+bHOME:=FALSE;]]></ST>
       </Implementation>
     </Action>
     <Method Name="clear_cmd_req" Id="{c115c33f-8377-4dd1-8142-a1b93e7b6e59}">
@@ -2912,6 +2918,8 @@ END_IF
 
 CASE iAXIS_STATE OF
 	1:// ============================================== HOMING
+		bENABLE:=TRUE;
+		bHOME:=FALSE;
 		IF SKIP_HOME THEN
 			bHOMED:=TRUE;
 			IF bHOME_DIR THEN
@@ -3000,6 +3008,8 @@ CASE iAXIS_STATE OF
 	98:// ====================== UNINIT =========================
 		eSTATE:=E_STATE.uninit;
 		sAXIS_STATE:='UNINIT';
+		bENABLE:=FALSE;
+		bHOMED:=FALSE;
 		IF bHOME THEN
 			iAXIS_STATE:=1;
 			bSTATE_ERROR:=FALSE;
@@ -3019,10 +3029,10 @@ CASE iAXIS_STATE OF
 	100://==================== READY =============================
 		eSTATE:=E_STATE.ready;
 		sAXIS_STATE:='READY';
-		IF bHOME AND NOT bHOMED THEN
-			iAXIS_STATE:=1;
-			bSTATE_ERROR:=FALSE;
-		END_IF
+		//IF bHOME AND NOT bHOMED THEN
+			//iAXIS_STATE:=1;
+			//bSTATE_ERROR:=FALSE;
+		//END_IF
 		IF bCLOSE AND NOT bCLOSED THEN
 			iAXIS_STATE:=40;
 			bSTATE_ERROR:=FALSE;
@@ -3032,10 +3042,12 @@ CASE iAXIS_STATE OF
 			bSTATE_ERROR:=FALSE;
 		END_IF
 		IF bMoveAbs THEN
+			bENABLE:=TRUE;
 			iAXIS_STATE:=50;
 			bSTATE_ERROR:=FALSE;
 		END_IF
 		IF bMoveRel THEN
+			bENABLE:=TRUE;
 			iAXIS_STATE:=51;
 			bSTATE_ERROR:=FALSE;
 		END_IF
@@ -3085,7 +3097,11 @@ END_IF]]></ST>
       <LineId Id="383" Count="0" />
       <LineId Id="286" Count="1" />
       <LineId Id="390" Count="0" />
-      <LineId Id="288" Count="20" />
+      <LineId Id="288" Count="4" />
+      <LineId Id="295" Count="4" />
+      <LineId Id="466" Count="0" />
+      <LineId Id="465" Count="0" />
+      <LineId Id="300" Count="8" />
       <LineId Id="145" Count="0" />
     </LineIds>
     <LineIds Name="FB_Axis.aAXIS_ERROR">
@@ -3099,6 +3115,9 @@ END_IF]]></ST>
     <LineIds Name="FB_Axis.aHOME">
       <LineId Id="1" Count="0" />
     </LineIds>
+    <LineIds Name="FB_Axis.aRESET">
+      <LineId Id="1" Count="1" />
+    </LineIds>
     <LineIds Name="FB_Axis.clear_cmd_req">
       <LineId Id="3" Count="1" />
       <LineId Id="2" Count="0" />
@@ -3111,6 +3130,8 @@ END_IF]]></ST>
       <LineId Id="48" Count="0" />
       <LineId Id="6" Count="0" />
       <LineId Id="10" Count="1" />
+      <LineId Id="327" Count="0" />
+      <LineId Id="324" Count="0" />
       <LineId Id="317" Count="0" />
       <LineId Id="285" Count="1" />
       <LineId Id="288" Count="1" />
@@ -3150,7 +3171,9 @@ END_IF]]></ST>
       <LineId Id="173" Count="0" />
       <LineId Id="8" Count="0" />
       <LineId Id="271" Count="0" />
-      <LineId Id="13" Count="1" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="322" Count="1" />
+      <LineId Id="14" Count="0" />
       <LineId Id="16" Count="0" />
       <LineId Id="82" Count="0" />
       <LineId Id="17" Count="0" />
@@ -3168,9 +3191,13 @@ END_IF]]></ST>
       <LineId Id="272" Count="0" />
       <LineId Id="202" Count="10" />
       <LineId Id="75" Count="0" />
-      <LineId Id="254" Count="2" />
+      <LineId Id="254" Count="0" />
+      <LineId Id="326" Count="0" />
+      <LineId Id="255" Count="1" />
       <LineId Id="253" Count="0" />
-      <LineId Id="258" Count="2" />
+      <LineId Id="258" Count="0" />
+      <LineId Id="325" Count="0" />
+      <LineId Id="259" Count="1" />
       <LineId Id="257" Count="0" />
       <LineId Id="262" Count="2" />
       <LineId Id="261" Count="0" />
