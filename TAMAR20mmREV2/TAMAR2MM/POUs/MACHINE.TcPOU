@@ -6,7 +6,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF fbFEEDER.eSTATE= E_STATE.error OR fbSEPARATE1.eSTATE= E_STATE.error THEN
+      <ST><![CDATA[IF fbFEEDER.eSTATE= E_STATE.error OR fbSEPARATE1.eSTATE= E_STATE.error OR MAIN_CONV.eSTATE= E_STATE.error OR SUP_CONV.eSTATE= E_STATE.error THEN
 	iMAIN_STATE:=99 ;
 END_IF
 
@@ -19,6 +19,7 @@ END_IF
 CASE iMAIN_STATE OF 
 	1://===================================== HOME ============================
 		MAIN_CONV.aHOME();
+		SUP_CONV.aHOME();
 		eMAIN_STATE:=E_STATE.busy;
 		bMAIN_HOME:=FALSE;
 		sMAIN_STATE:='HOMING';
@@ -28,58 +29,52 @@ CASE iMAIN_STATE OF
 		END_IF
 	2: //====================================  START ==============================
 		eMAIN_STATE:=E_STATE.busy;
-		sMAIN_STATE:='FEEDING';
-		fbFEEDER.aSTART();
+		sMAIN_STATE:='CONVAYORS';
 		MAIN_CONV.mMOVE_REL(1000);
-		IF fbFEEDER.eSTATE= E_STATE.busy AND MAIN_CONV.eSTATE = E_STATE.busy THEN
+		SUP_CONV.mMOVE_REL(1000);
+		IF SUP_CONV.eSTATE= E_STATE.busy AND MAIN_CONV.eSTATE = E_STATE.busy THEN
 			iMAIN_STATE:=3;
 		END_IF
-	3://wait for feeder
-		IF fbFEEDER.eSTATE= E_STATE.ready AND MAIN_CONV.eSTATE = E_STATE.ready THEN
+	3://wait for convayors
+		IF SUP_CONV.eSTATE= E_STATE.ready AND MAIN_CONV.eSTATE = E_STATE.ready THEN
 			IF NOT bMAIN_PAUSE THEN
 				iMAIN_STATE:=4;
 			END_IF
 		END_IF
-		IF fbFEEDER.eSTATE= E_STATE.error THEN
-			iMAIN_STATE:=99;
-		END_IF
-	4: //separate1
+		
+	4: //stations
 		eMAIN_STATE:=E_STATE.busy;
-		sMAIN_STATE:=' SEPARATE1';
+		sMAIN_STATE:=' STANIONS';
+		fbFEEDER.aSTART();
 		fbSEPARATE1.aSTART();
-		IF fbSEPARATE1.eSTATE= E_STATE.busy THEN
+		fbSEPARATE2.aSTART();
+		IF fbSEPARATE1.eSTATE= E_STATE.busy AND fbSEPARATE2.eSTATE= E_STATE.busy AND fbFEEDER.eSTATE= E_STATE.busy THEN
 			iMAIN_STATE:=5;
 		END_IF
 	5://wait for separate1
-		IF fbSEPARATE1.eSTATE= E_STATE.ready THEN
+		IF fbSEPARATE1.eSTATE= E_STATE.ready AND fbSEPARATE2.eSTATE= E_STATE.ready AND fbFEEDER.eSTATE= E_STATE.ready THEN
 			IF NOT bMAIN_PAUSE THEN
 				iMAIN_STATE:=100;
 			END_IF
 		END_IF
-		IF fbSEPARATE1.eSTATE= E_STATE.error THEN
-			iMAIN_STATE:=99;
-		END_IF
+		
 	98://======================================== UNINIT ============================
 		bMAIN_HOMED:=FALSE;
 		eMAIN_STATE:=E_STATE.uninit;
-		MAIN_CONV.aRESET();
 		sMAIN_STATE:='UNINIT';
 		bMAIN_RESET:=FALSE;
 		fbFEEDER.aRESET();
 		fbSEPARATE1.aRESET();
-		//fbPIST3.aRESET();
-		IF fbFEEDER.eSTATE = E_STATE.uninit AND fbSEPARATE1.eSTATE = E_STATE.uninit AND MAIN_CONV.eSTATE=E_STATE.uninit  THEN
+		MAIN_CONV.aRESET();
+		
+		IF fbFEEDER.eSTATE = E_STATE.uninit AND fbSEPARATE1.eSTATE = E_STATE.uninit AND MAIN_CONV.eSTATE=E_STATE.uninit  AND SUP_CONV.eSTATE=E_STATE.uninit THEN
 			iMAIN_STATE:=980;
 		END_IF
 	980: 
-		IF fbFEEDER.eSTATE= E_STATE.ready AND fbSEPARATE1.eSTATE= E_STATE.ready AND MAIN_CONV.eSTATE=E_STATE.uninit  THEN
+		IF fbFEEDER.eSTATE= E_STATE.ready AND fbSEPARATE1.eSTATE= E_STATE.ready AND MAIN_CONV.eSTATE=E_STATE.uninit  AND SUP_CONV.eSTATE=E_STATE.uninit 
 			IF bMAIN_HOME THEN
 				iMAIN_STATE:=1;
 			END_IF
-		END_IF
-		
-		IF fbFEEDER.bERROR OR fbSEPARATE1.bERROR THEN
-			iMAIN_STATE:=99;
 		END_IF
 	
 	99://========================================== ERROR ================================
@@ -104,6 +99,7 @@ END_CASE]]></ST>
       <LineId Id="12" Count="0" />
       <LineId Id="16" Count="1" />
       <LineId Id="120" Count="0" />
+      <LineId Id="140" Count="0" />
       <LineId Id="124" Count="0" />
       <LineId Id="126" Count="0" />
       <LineId Id="125" Count="0" />
@@ -111,16 +107,22 @@ END_CASE]]></ST>
       <LineId Id="133" Count="0" />
       <LineId Id="123" Count="0" />
       <LineId Id="119" Count="0" />
-      <LineId Id="18" Count="2" />
+      <LineId Id="18" Count="1" />
       <LineId Id="135" Count="0" />
-      <LineId Id="21" Count="11" />
-      <LineId Id="97" Count="14" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="21" Count="8" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="97" Count="2" />
+      <LineId Id="142" Count="1" />
+      <LineId Id="100" Count="9" />
       <LineId Id="63" Count="2" />
       <LineId Id="134" Count="0" />
-      <LineId Id="132" Count="0" />
-      <LineId Id="66" Count="10" />
+      <LineId Id="66" Count="3" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="70" Count="6" />
       <LineId Id="127" Count="1" />
-      <LineId Id="77" Count="11" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="82" Count="6" />
       <LineId Id="112" Count="1" />
       <LineId Id="89" Count="0" />
       <LineId Id="92" Count="2" />

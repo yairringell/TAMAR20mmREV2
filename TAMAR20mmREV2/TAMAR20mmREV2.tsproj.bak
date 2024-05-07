@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.50">
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.55">
 	<DataTypes>
 		<DataType>
 			<Name GUID="{18071995-0000-0000-0000-000000000035}" TcBaseType="true" HideType="true">UINTARR2</Name>
@@ -2072,7 +2072,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{70F04D60-736E-4E14-8B4A-8BF70786744E}" Name="TAMAR2MM" PrjFilePath="TAMAR2MM\TAMAR2MM.plcproj" TmcFilePath="TAMAR2MM\TAMAR2MM.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="TAMAR2MM\TAMAR2MM.tmc" TmcHash="{BD067BC6-8DE2-7B40-D202-1E06D47204CA}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="TAMAR2MM\TAMAR2MM.tmc" TmcHash="{911786A2-8ACD-2745-5C45-EA616A066543}">
 					<Name>TAMAR2MM Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -2178,6 +2178,10 @@ External Setpoint Generation:
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^MAIN_CONV">
 				<Link VarA="PlcTask Inputs^GVL_MAIN.MAIN_CONV.Axis.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^GVL_MAIN.MAIN_CONV.Axis.PlcToNc" VarB="Inputs^FromPlc"/>
+			</OwnerB>
+			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^SUP_CONV">
+				<Link VarA="PlcTask Inputs^GVL_MAIN.SUP_CONV.Axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="PlcTask Outputs^GVL_MAIN.SUP_CONV.Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>

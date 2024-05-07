@@ -200,9 +200,9 @@ CASE pist_STATE OF
 	END_CASE
 //================================================== ERROR =====================================================	
 	E_PISTON_STATE.error:
-	eSTATE:=E_STATE.error;
-	sSTATE:='ERROR';
-	bERROR:=TRUE;
+		eSTATE:=E_STATE.error;
+		sSTATE:='ERROR';
+		bERROR:=TRUE;
 	//
 END_CASE	
 	

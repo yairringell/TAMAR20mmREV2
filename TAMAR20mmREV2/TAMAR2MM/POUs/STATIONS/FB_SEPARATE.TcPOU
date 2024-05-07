@@ -41,9 +41,6 @@ CASE iSTATION_STATE OF
 				iSTATION_STATE:=3;
 			END_IF
 		END_IF
-		IF PIST1.eSTATE= E_STATE.error THEN
-			iSTATION_STATE:=99;
-		END_IF
 	3:	//open pist 2
 		sSTATION_STATE:=' PIST2 OPENING';
 		fbPIST2.aOPEN();
@@ -56,9 +53,6 @@ CASE iSTATION_STATE OF
 				iSTATION_STATE:=5;
 			END_IF
 		END_IF
-		IF fbPIST2.eSTATE= E_STATE.error THEN
-			iSTATION_STATE:=99;
-		END_IF
 	5:	//open pist 3
 		sSTATION_STATE:=' PIST3 OPENING';
 		fbPIST3.aOPEN();
@@ -68,13 +62,47 @@ CASE iSTATION_STATE OF
 	6:
 		IF fbPIST3.eSTATE= E_STATE.ready THEN
 			IF NOT bPAUSE THEN
+				iSTATION_STATE:=7;
+			END_IF
+		END_IF
+		//========================================================================== CLOSING =======================
+	7:	//close pist 3
+		sSTATION_STATE:=' PIST3 CLOSING';
+		fbPIST3.aCLOSE();
+		IF fbPIST3.eSTATE= E_STATE.busy OR fbPIST3.bCLOSED THEN
+			iSTATION_STATE:=8;
+		END_IF
+	8:
+		IF fbPIST3.eSTATE= E_STATE.ready THEN
+			IF NOT bPAUSE THEN
+				iSTATION_STATE:=9;
+			END_IF
+		END_IF
+	9:	//close pist 2
+		sSTATION_STATE:=' PIST2 CLOSING';
+		fbPIST2.aCLOSE();
+		IF fbPIST2.eSTATE= E_STATE.busy OR fbPIST2.bCLOSED THEN
+			iSTATION_STATE:=10;
+		END_IF
+	10:
+		IF fbPIST2.eSTATE= E_STATE.ready THEN
+			IF NOT bPAUSE THEN
+				iSTATION_STATE:=11;
+			END_IF
+		END_IF	
+	11:	//close pist 1
+		sSTATION_STATE:=' PIST1 CLOSING';
+		fbPIST1.aCLOSE();
+		IF fbPIST1.eSTATE= E_STATE.busy OR fbPIST1.bCLOSED THEN
+			iSTATION_STATE:=12;
+		END_IF
+	12:
+		IF fbPIST1.eSTATE= E_STATE.ready THEN
+			IF NOT bPAUSE THEN
 				iSTATION_STATE:=100;
 			END_IF
 		END_IF
-		IF fbPIST3.eSTATE= E_STATE.error THEN
-			iSTATION_STATE:=99;
-		END_IF
-
+	
 	98:
 		eSTATE:=E_STATE.uninit;
 		sSTATION_STATE:='UNINIT';
@@ -116,7 +144,18 @@ END_CASE]]></ST>
       <LineId Id="142" Count="0" />
       <LineId Id="21" Count="1" />
       <LineId Id="138" Count="0" />
-      <LineId Id="23" Count="67" />
+      <LineId Id="23" Count="11" />
+      <LineId Id="38" Count="11" />
+      <LineId Id="53" Count="11" />
+      <LineId Id="181" Count="0" />
+      <LineId Id="157" Count="10" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="170" Count="10" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="182" Count="10" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="193" Count="0" />
+      <LineId Id="69" Count="21" />
       <LineId Id="93" Count="0" />
       <LineId Id="95" Count="6" />
       <LineId Id="104" Count="0" />
