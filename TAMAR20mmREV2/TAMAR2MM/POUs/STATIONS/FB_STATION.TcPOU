@@ -9,6 +9,8 @@ VAR_INPUT
 	bHOMED : BOOL:=FALSE;
 	tACTION:TON;
 	bPAUSE:BOOL:=FALSE;
+	bHOME: BOOL:=FALSE;
+	
 	
 END_VAR
 VAR_OUTPUT
@@ -27,6 +29,11 @@ END_VAR
 
 	 ]]></ST>
     </Implementation>
+    <Action Name="aHOME" Id="{aa4b3268-468b-451c-a4a6-4f989c2f669f}">
+      <Implementation>
+        <ST><![CDATA[bHOME:=TRUE;]]></ST>
+      </Implementation>
+    </Action>
     <Action Name="aRESET" Id="{493c17cd-846f-4d67-8b2d-ec5af866b7f6}">
       <Implementation>
         <ST><![CDATA[bRESET:=TRUE;]]></ST>
@@ -41,6 +48,9 @@ END_VAR
       <LineId Id="25" Count="1" />
       <LineId Id="31" Count="0" />
       <LineId Id="27" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_STATION.aHOME">
+      <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="FB_STATION.aRESET">
       <LineId Id="1" Count="0" />

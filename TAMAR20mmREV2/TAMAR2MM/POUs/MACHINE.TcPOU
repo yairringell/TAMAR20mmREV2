@@ -20,11 +20,12 @@ CASE iMAIN_STATE OF
 	1://===================================== HOME ============================
 		MAIN_CONV.aHOME();
 		SUP_CONV.aHOME();
-		
+		fbSEPARATE1.aHOME();
+		fbFEEDER.aHOME();
 		eMAIN_STATE:=E_STATE.busy;
 		bMAIN_HOME:=FALSE;
 		sMAIN_STATE:='HOMING';
-		IF MAIN_CONV.bHOMED AND SUP_CONV.bHOMED THEN
+		IF MAIN_CONV.bHOMED AND SUP_CONV.bHOMED AND fbSEPARATE1.bHOMED AND fbFEEDER.bHOMED THEN 
 			iMAIN_STATE:=100;
 			bMAIN_HOMED:=TRUE;
 		END_IF
@@ -72,7 +73,7 @@ CASE iMAIN_STATE OF
 			iMAIN_STATE:=980;
 		END_IF
 	980: 
-		IF fbFEEDER.eSTATE= E_STATE.ready AND fbSEPARATE1.eSTATE= E_STATE.ready AND MAIN_CONV.eSTATE=E_STATE.uninit  AND SUP_CONV.eSTATE=E_STATE.uninit THEN
+		IF fbFEEDER.eSTATE= E_STATE.uninit AND fbSEPARATE1.eSTATE= E_STATE.uninit AND MAIN_CONV.eSTATE=E_STATE.uninit  AND SUP_CONV.eSTATE=E_STATE.uninit THEN
 			IF bMAIN_HOME THEN
 				iMAIN_STATE:=1;
 			END_IF
@@ -102,6 +103,7 @@ END_CASE]]></ST>
       <LineId Id="120" Count="0" />
       <LineId Id="140" Count="0" />
       <LineId Id="149" Count="0" />
+      <LineId Id="153" Count="0" />
       <LineId Id="148" Count="0" />
       <LineId Id="126" Count="0" />
       <LineId Id="125" Count="0" />

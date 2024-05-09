@@ -3029,10 +3029,10 @@ CASE iAXIS_STATE OF
 	100://==================== READY =============================
 		eSTATE:=E_STATE.ready;
 		sAXIS_STATE:='READY';
-		//IF bHOME AND NOT bHOMED THEN
-			//iAXIS_STATE:=1;
+		IF bHOME AND NOT bHOMED THEN
+			iAXIS_STATE:=1;
 			//bSTATE_ERROR:=FALSE;
-		//END_IF
+		END_IF
 		IF bCLOSE AND NOT bCLOSED THEN
 			iAXIS_STATE:=40;
 			bSTATE_ERROR:=FALSE;
