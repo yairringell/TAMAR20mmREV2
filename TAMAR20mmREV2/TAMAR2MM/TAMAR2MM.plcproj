@@ -73,6 +73,19 @@
     <Compile Include="POUs\GVL_MAIN.TcGVL">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\IO\EL1809.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\IO\EL2809.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\IO\GVL_IO.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\IO\ST_VTUG.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\MACHINE.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -87,6 +100,10 @@
     </Compile>
     <Compile Include="POUs\PISTONS\FB_PISTON.TcPOU">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\PISTONS\GVL_PISTONS.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="POUs\PISTONS\PIST_CYCLE.TcPOU">
       <SubType>Code</SubType>
@@ -146,6 +163,7 @@
     <Folder Include="GVLs" />
     <Folder Include="POUs\AXES" />
     <Folder Include="POUs\EVENT_LOGGER" />
+    <Folder Include="POUs\IO" />
     <Folder Include="POUs\STATIONS" />
     <Folder Include="POUs\PISTONS" />
     <Folder Include="VISUs" />

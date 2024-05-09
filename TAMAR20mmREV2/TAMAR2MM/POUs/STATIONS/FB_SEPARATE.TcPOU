@@ -3,12 +3,21 @@
   <POU Name="FB_SEPARATE" Id="{17fe38d2-b0da-4b85-bd32-b3f6b40170af}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SEPARATE  EXTENDS FB_STATION
 VAR_INPUT
-	fbPIST1: REFERENCE TO FB_PISTON;
-	fbPIST2: REFERENCE TO FB_PISTON;
-	fbPIST3: REFERENCE TO FB_PISTON;
-	fbPIST4: REFERENCE TO FB_PISTON;
-	fbPIST5: REFERENCE TO FB_PISTON;
-	fbPIST6: REFERENCE TO FB_PISTON;
+	fbPUSH:   REFERENCE TO FB_PISTON;
+	fbLIFT:   REFERENCE TO FB_PISTON;
+	fbCOLET1: REFERENCE TO FB_PISTON;
+	fbCOLET2: REFERENCE TO FB_PISTON;
+	fbCOLET3: REFERENCE TO FB_PISTON;
+	fbCOLET4: REFERENCE TO FB_PISTON;
+	fbJACK1:  REFERENCE TO FB_PISTON;
+	fbJACK2:  REFERENCE TO FB_PISTON;
+	fbJACK3:  REFERENCE TO FB_PISTON;
+	fbJACK4:  REFERENCE TO FB_PISTON;
+	fbDRAWR:  REFERENCE TO FB_PISTON;
+	fbPINS1:  REFERENCE TO FB_PISTON;
+	fbPINS2:  REFERENCE TO FB_PISTON;
+	fbPRESS1A:REFERENCE TO FB_Axis;
+	fbPRESS1B:REFERENCE TO FB_Axis;
 	
 END_VAR
 VAR_OUTPUT
@@ -18,11 +27,25 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF bRESET THEN
+	bRESET:=FALSE;
 	iSTATION_STATE:=98 ;
 	bPAUSE:=FALSE;
 END_IF
 
-IF iSTATION_STATE<>98 AND (fbPIST1.eSTATE= E_STATE.error OR fbPIST2.eSTATE= E_STATE.error OR fbPIST3.eSTATE= E_STATE.error)  THEN 
+IF iSTATION_STATE<>98 AND (fbLIFT.eSTATE= E_STATE.error OR
+							 fbCOLET1.eSTATE= E_STATE.error OR 
+								fbCOLET2.eSTATE= E_STATE.error OR
+									fbCOLET3.eSTATE= E_STATE.error OR 
+										fbCOLET4.eSTATE= E_STATE.error OR
+											fbJACK1.eSTATE= E_STATE.error OR
+												 fbJACK2.eSTATE= E_STATE.error OR 
+													fbJACK3.eSTATE= E_STATE.error OR
+														fbJACK4.eSTATE= E_STATE.error OR 
+															fbDRAWR.eSTATE= E_STATE.error OR
+																fbPINS1.eSTATE= E_STATE.error OR
+												 					fbPINS2.eSTATE= E_STATE.error OR
+																		fbPUSH.eSTATE= E_STATE.error  )THEN									
+																										 
 	iSTATION_STATE:=99;
 END_IF
 
@@ -30,101 +53,205 @@ CASE iSTATION_STATE OF
 	1: //open pist 1
 		bSTART:=FALSE;
 		eSTATE:=E_STATE.busy;
-		sSTATION_STATE:=' PIST1 OPENING';
-		fbPIST1.aOPEN();
-		IF fbPIST1.eSTATE= E_STATE.busy OR fbPIST1.bOPENED THEN
+		sSTATION_STATE:='LIFT DOWN';
+		fbLIFT.aOPEN();
+		IF fbLIFT.eSTATE= E_STATE.busy THEN
 			iSTATION_STATE:=2;
 		END_IF
-	2://wait for pist1 ready
-		IF fbPIST1.eSTATE= E_STATE.ready THEN
+	2://wait for LIFT ready
+		IF fbLIFT.eSTATE= E_STATE.ready THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=3;
 			END_IF
 		END_IF
-	3:	//open pist 2
-		sSTATION_STATE:=' PIST2 OPENING';
-		fbPIST2.aOPEN();
-		IF fbPIST2.eSTATE= E_STATE.busy OR fbPIST2.bOPENED THEN
+	3:	//CLOSE COLET 1 2  ======================================= SEPARATE A =====================
+		sSTATION_STATE:='CLOSE COLET 1 2';
+		fbCOLET1.aOPEN();
+		fbCOLET2.aOPEN();
+		IF fbCOLET1.eSTATE= E_STATE.busy AND fbCOLET2.eSTATE= E_STATE.busy THEN
 			iSTATION_STATE:=4;
 		END_IF
-	4:
-		IF fbPIST2.eSTATE= E_STATE.ready THEN
+	4:// WAIT FOR COLET 1 2
+		IF fbCOLET1.eSTATE= E_STATE.ready AND fbCOLET2.eSTATE= E_STATE.ready THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=5;
 			END_IF
 		END_IF
-	5:	//open pist 3
-		sSTATION_STATE:=' PIST3 OPENING';
-		fbPIST3.aOPEN();
-		IF fbPIST3.eSTATE= E_STATE.busy OR fbPIST3.bOPENED THEN
+	5:	//SEPARATE A 
+		sSTATION_STATE:='SEPARATE A';
+		fbLIFT.aCLOSE();
+		fbPRESS1A.mMOVE_REL(1000);
+		fbPRESS1B.mMOVE_REL(1000);
+		
+		IF fbLIFT.eSTATE= E_STATE.busy AND fbPRESS1A.eSTATE= E_STATE.busy AND fbPRESS1B.eSTATE= E_STATE.busy THEN
 			iSTATION_STATE:=6;
 		END_IF
 	6:
-		IF fbPIST3.eSTATE= E_STATE.ready THEN
+		IF  fbPRESS1A.eSTATE= E_STATE.ready AND fbPRESS1B.eSTATE= E_STATE.ready THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=7;
 			END_IF
 		END_IF
-		//========================================================================== CLOSING =======================
-	7:	//close pist 3
-		sSTATION_STATE:=' PIST3 CLOSING';
-		fbPIST3.aCLOSE();
-		IF fbPIST3.eSTATE= E_STATE.busy OR fbPIST3.bCLOSED THEN
+		
+	7:	//CLOSE COLET 1 2  ======================================= SEPARATE B =====================
+		sSTATION_STATE:='CLOSE COLET 3 4';
+		fbCOLET3.aOPEN();
+		fbCOLET4.aOPEN();
+		IF fbCOLET3.eSTATE= E_STATE.busy AND fbCOLET4.eSTATE= E_STATE.busy THEN
 			iSTATION_STATE:=8;
 		END_IF
-	8:
-		IF fbPIST3.eSTATE= E_STATE.ready THEN
+	8:// WAIT FOR COLET 1 2
+		IF fbCOLET3.eSTATE= E_STATE.ready AND fbCOLET4.eSTATE= E_STATE.ready THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=9;
 			END_IF
 		END_IF
-	9:	//close pist 2
-		sSTATION_STATE:=' PIST2 CLOSING';
-		fbPIST2.aCLOSE();
-		IF fbPIST2.eSTATE= E_STATE.busy OR fbPIST2.bCLOSED THEN
+	9:	//SEPARATE A 
+		sSTATION_STATE:='SEPARATE B';
+		fbPRESS1A.mMOVE_REL(1000);
+		fbPRESS1B.mMOVE_REL(1000);
+		
+		IF fbPRESS1A.eSTATE= E_STATE.busy AND fbPRESS1B.eSTATE= E_STATE.busy THEN
 			iSTATION_STATE:=10;
 		END_IF
 	10:
-		IF fbPIST2.eSTATE= E_STATE.ready THEN
+		IF  fbLIFT.eSTATE= E_STATE.ready AND fbPRESS1A.eSTATE= E_STATE.ready AND fbPRESS1B.eSTATE= E_STATE.ready THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=11;
 			END_IF
-		END_IF	
-	11:	//close pist 1
-		sSTATION_STATE:=' PIST1 CLOSING';
-		fbPIST1.aCLOSE();
-		IF fbPIST1.eSTATE= E_STATE.busy OR fbPIST1.bCLOSED THEN
+		END_IF
+		
+		//========================================================================== CLEARING =======================
+	11:	
+		sSTATION_STATE:='OPEN DRAWER';
+		fbDRAWR.aOPEN();
+		IF fbDRAWR.eSTATE= E_STATE.busy  THEN
 			iSTATION_STATE:=12;
 		END_IF
 	12:
-		IF fbPIST1.eSTATE= E_STATE.ready THEN
+		IF fbDRAWR.eSTATE= E_STATE.ready THEN
+			IF NOT bPAUSE THEN
+				iSTATION_STATE:=13;
+			END_IF
+		END_IF
+	13:	//open colets
+		sSTATION_STATE:='OPEN COLETS';
+		fbCOLET1.aCLOSE();
+		fbCOLET2.aCLOSE();
+		fbCOLET3.aCLOSE();
+		fbCOLET4.aCLOSE();
+		IF fbCOLET1.eSTATE= E_STATE.busy AND fbCOLET2.eSTATE= E_STATE.busy AND fbCOLET3.eSTATE= E_STATE.busy AND fbCOLET4.eSTATE= E_STATE.busy THEN
+			iSTATION_STATE:=14;
+		END_IF
+	14:
+		IF fbCOLET1.eSTATE= E_STATE.ready AND fbCOLET2.eSTATE= E_STATE.ready AND fbCOLET3.eSTATE= E_STATE.ready AND fbCOLET4.eSTATE= E_STATE.ready THEN
+			IF NOT bPAUSE THEN
+				iSTATION_STATE:=15;
+			END_IF
+		END_IF	
+	15:	//press pins
+		sSTATION_STATE:='PINS OUT';
+		fbPINS1.aOPEN();
+		fbPINS2.aOPEN();
+		IF fbPINS1.eSTATE= E_STATE.busy AND fbPINS2.eSTATE= E_STATE.busy THEN
+			iSTATION_STATE:=16;
+		END_IF
+	16:
+		IF fbPINS1.eSTATE= E_STATE.ready AND fbPINS2.eSTATE= E_STATE.ready THEN
+			IF NOT bPAUSE THEN
+				iSTATION_STATE:=17;
+			END_IF
+		END_IF
+	17:	//pins up and push
+		sSTATION_STATE:='PINS UP AND PUSH';
+		fbPINS1.aCLOSE();
+		fbPINS2.aCLOSE();
+		fbPUSH.aOPEN();
+		IF fbPUSH.eSTATE= E_STATE.busy AND fbPINS1.eSTATE= E_STATE.busy AND fbPINS2.eSTATE= E_STATE.busy THEN
+			iSTATION_STATE:=18;
+		END_IF
+	18:
+		IF  fbPUSH.eSTATE= E_STATE.ready AND fbPINS1.eSTATE= E_STATE.ready AND fbPINS2.eSTATE= E_STATE.ready THEN
+			IF NOT bPAUSE THEN
+				iSTATION_STATE:=19;
+			END_IF
+		END_IF
+	19:	//close drawer jacks down
+		sSTATION_STATE:='CLOSE DRAWER JACKS DOWN';
+		fbDRAWR.aCLOSE();
+		fbPRESS1A.aHOME();
+		fbPRESS1B.aHOME();
+		IF fbDRAWR.eSTATE= E_STATE.busy AND fbPRESS1A.eSTATE= E_STATE.busy AND fbPRESS1B.eSTATE= E_STATE.busy THEN
+			iSTATION_STATE:=20;
+		END_IF
+	20:
+		IF  fbLIFT.eSTATE= E_STATE.ready AND fbDRAWR.eSTATE= E_STATE.ready AND fbPRESS1A.bHOME AND fbPRESS1B.bHOMED THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=100;
 			END_IF
 		END_IF
+
 	
 	98:
 		eSTATE:=E_STATE.uninit;
 		sSTATION_STATE:='UNINIT';
 		bRESET:=FALSE;
-		fbPIST1.aRESET();
-		fbPIST2.aRESET();
-		fbPIST3.aRESET();
-		IF fbPIST1.eSTATE = E_STATE.uninit AND fbPIST1.eSTATE = E_STATE.uninit AND fbPIST1.eSTATE = E_STATE.uninit THEN
+		fbPRESS1A.aHOME();
+		fbPRESS1B.aHOME();
+		fbPUSH.aRESET();
+		fbLIFT.aRESET();
+		fbCOLET1.aRESET();
+		fbCOLET2.aRESET();
+		fbCOLET3.aRESET();
+		fbCOLET4.aRESET();
+		fbJACK1.aRESET();
+		fbJACK2.aRESET();
+		fbJACK3.aRESET();
+		fbJACK4.aRESET();
+		fbDRAWR.aRESET();
+		fbPINS1.aRESET();
+		fbPINS2.aRESET();
+		
+		IF fbPRESS1A.eSTATE= E_STATE.busy AND 
+					fbPRESS1B.eSTATE= E_STATE.busy AND 
+						fbLIFT.eSTATE= E_STATE.uninit AND
+							 fbCOLET1.eSTATE= E_STATE.uninit AND
+								fbCOLET2.eSTATE= E_STATE.uninit AND
+									fbCOLET3.eSTATE= E_STATE.uninit AND
+										fbCOLET4.eSTATE= E_STATE.uninit AND
+											fbJACK1.eSTATE= E_STATE.uninit AND
+												 fbJACK2.eSTATE= E_STATE.uninit AND 
+													fbJACK3.eSTATE= E_STATE.uninit AND
+														fbJACK4.eSTATE= E_STATE.uninit AND 
+															fbDRAWR.eSTATE= E_STATE.uninit AND
+																fbPINS1.eSTATE= E_STATE.uninit AND
+												 					fbPINS2.eSTATE= E_STATE.uninit AND
+																		fbPUSH.eSTATE= E_STATE.uninit THEN
 			iSTATION_STATE:=980;
 		END_IF
 	980: 
-		IF fbPIST1.eSTATE= E_STATE.ready AND fbPIST2.eSTATE= E_STATE.ready AND fbPIST3.eSTATE= E_STATE.ready THEN
+		IF fbPRESS1A.bHOMED AND 
+				fbPRESS1B.bHOMED AND 
+					fbLIFT.eSTATE= E_STATE.ready AND
+						 fbCOLET1.eSTATE= E_STATE.ready AND
+							fbCOLET2.eSTATE= E_STATE.ready AND
+								fbCOLET3.eSTATE= E_STATE.ready AND
+									fbCOLET4.eSTATE= E_STATE.ready AND
+										fbJACK1.eSTATE= E_STATE.ready AND
+											fbJACK2.eSTATE= E_STATE.ready AND 
+												fbJACK3.eSTATE= E_STATE.ready AND
+													fbJACK4.eSTATE= E_STATE.ready AND 
+														fbDRAWR.eSTATE= E_STATE.ready AND
+															fbPINS1.eSTATE= E_STATE.ready AND
+																fbPINS2.eSTATE= E_STATE.ready AND
+																	fbPUSH.eSTATE= E_STATE.ready THEN
 			iSTATION_STATE:=100;
 		END_IF
 		
-		IF fbPIST1.bERROR OR fbPIST2.bERROR OR fbPIST3.bERROR THEN
-			iSTATION_STATE:=99;
-		END_IF
 	
 	99:
 		eSTATE:=E_STATE.error;
-		sSTATION_STATE:='PISTON ERROR';
+		sSTATION_STATE:='ERROR';
 		
 	100:
 		eSTATE:=E_STATE.ready;
@@ -137,25 +264,72 @@ CASE iSTATION_STATE OF
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="FB_SEPARATE">
-      <LineId Id="121" Count="2" />
+      <LineId Id="121" Count="0" />
+      <LineId Id="208" Count="0" />
+      <LineId Id="122" Count="1" />
       <LineId Id="119" Count="0" />
-      <LineId Id="139" Count="2" />
+      <LineId Id="139" Count="1" />
+      <LineId Id="215" Count="1" />
+      <LineId Id="221" Count="5" />
+      <LineId Id="218" Count="1" />
+      <LineId Id="227" Count="0" />
+      <LineId Id="322" Count="0" />
+      <LineId Id="321" Count="0" />
+      <LineId Id="141" Count="0" />
       <LineId Id="120" Count="0" />
       <LineId Id="142" Count="0" />
       <LineId Id="21" Count="1" />
       <LineId Id="138" Count="0" />
       <LineId Id="23" Count="11" />
-      <LineId Id="38" Count="11" />
-      <LineId Id="53" Count="11" />
+      <LineId Id="38" Count="2" />
+      <LineId Id="233" Count="0" />
+      <LineId Id="41" Count="8" />
+      <LineId Id="53" Count="2" />
+      <LineId Id="234" Count="0" />
+      <LineId Id="236" Count="0" />
+      <LineId Id="235" Count="0" />
+      <LineId Id="56" Count="8" />
+      <LineId Id="237" Count="0" />
+      <LineId Id="240" Count="14" />
+      <LineId Id="256" Count="10" />
+      <LineId Id="238" Count="1" />
       <LineId Id="181" Count="0" />
       <LineId Id="157" Count="10" />
       <LineId Id="68" Count="0" />
-      <LineId Id="170" Count="10" />
+      <LineId Id="170" Count="2" />
+      <LineId Id="267" Count="2" />
+      <LineId Id="173" Count="7" />
       <LineId Id="168" Count="0" />
-      <LineId Id="182" Count="10" />
+      <LineId Id="182" Count="2" />
+      <LineId Id="270" Count="0" />
+      <LineId Id="185" Count="7" />
       <LineId Id="169" Count="0" />
+      <LineId Id="271" Count="3" />
+      <LineId Id="284" Count="0" />
+      <LineId Id="275" Count="7" />
       <LineId Id="193" Count="0" />
-      <LineId Id="69" Count="21" />
+      <LineId Id="286" Count="3" />
+      <LineId Id="301" Count="0" />
+      <LineId Id="291" Count="7" />
+      <LineId Id="283" Count="0" />
+      <LineId Id="300" Count="0" />
+      <LineId Id="299" Count="0" />
+      <LineId Id="69" Count="3" />
+      <LineId Id="231" Count="1" />
+      <LineId Id="304" Count="11" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="316" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="317" Count="0" />
+      <LineId Id="324" Count="11" />
+      <LineId Id="323" Count="0" />
+      <LineId Id="77" Count="2" />
+      <LineId Id="336" Count="0" />
+      <LineId Id="351" Count="0" />
+      <LineId Id="350" Count="0" />
+      <LineId Id="339" Count="10" />
+      <LineId Id="80" Count="2" />
+      <LineId Id="86" Count="4" />
       <LineId Id="93" Count="0" />
       <LineId Id="95" Count="6" />
       <LineId Id="104" Count="0" />
