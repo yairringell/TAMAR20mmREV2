@@ -3,21 +3,19 @@
   <POU Name="FB_SEPARATE" Id="{17fe38d2-b0da-4b85-bd32-b3f6b40170af}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SEPARATE  EXTENDS FB_STATION
 VAR_INPUT
-	fbPUSH:   REFERENCE TO FB_PISTON;
-	fbLIFT:   REFERENCE TO FB_PISTON;
-	fbCOLET1: REFERENCE TO FB_PISTON;
-	fbCOLET2: REFERENCE TO FB_PISTON;
-	fbCOLET3: REFERENCE TO FB_PISTON;
-	fbCOLET4: REFERENCE TO FB_PISTON;
-	fbJACK1:  REFERENCE TO FB_PISTON;
-	fbJACK2:  REFERENCE TO FB_PISTON;
-	fbJACK3:  REFERENCE TO FB_PISTON;
-	fbJACK4:  REFERENCE TO FB_PISTON;
-	fbDRAWR:  REFERENCE TO FB_PISTON;
-	fbPINS1:  REFERENCE TO FB_PISTON;
-	fbPINS2:  REFERENCE TO FB_PISTON;
-	fbPRESS1A:REFERENCE TO FB_Axis;
-	fbPRESS1B:REFERENCE TO FB_Axis;
+	
+	fbLIFT:              REFERENCE TO FB_PISTON;
+	fbCOLET1:            REFERENCE TO FB_PISTON;
+	fbCOLET2:            REFERENCE TO FB_PISTON;
+	fbCOLET3:            REFERENCE TO FB_PISTON;
+	fbCOLET4:            REFERENCE TO FB_PISTON;
+	fbPUSH_FROM_COLET1:  REFERENCE TO FB_PISTON;
+	fbPUSH_FROM_COLET2:  REFERENCE TO FB_PISTON;
+	fbDRAWER:            REFERENCE TO FB_PISTON;
+	fbDRAWER_PUSHER:     REFERENCE TO FB_PISTON;
+	fbDRAWER_DOOR:       REFERENCE TO FB_PISTON;
+	fbPRESS1:            REFERENCE TO FB_Axis;
+	
 	
 END_VAR
 VAR_OUTPUT
@@ -26,7 +24,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF bRESET THEN
+      <ST><![CDATA[ IF bRESET THEN
 	bRESET:=FALSE;
 	iSTATION_STATE:=98 ;
 	bPAUSE:=FALSE;
@@ -37,26 +35,26 @@ IF iSTATION_STATE<>98 AND (fbLIFT.eSTATE= E_STATE.error OR
 								fbCOLET2.eSTATE= E_STATE.error OR
 									fbCOLET3.eSTATE= E_STATE.error OR 
 										fbCOLET4.eSTATE= E_STATE.error OR
-											fbJACK1.eSTATE= E_STATE.error OR
-												 fbJACK2.eSTATE= E_STATE.error OR 
-													fbJACK3.eSTATE= E_STATE.error OR
-														fbJACK4.eSTATE= E_STATE.error OR 
-															fbDRAWR.eSTATE= E_STATE.error OR
-																fbPINS1.eSTATE= E_STATE.error OR
-												 					fbPINS2.eSTATE= E_STATE.error OR
-																		fbPUSH.eSTATE= E_STATE.error  )THEN									
+											fbPUSH_FROM_COLET1.eSTATE= E_STATE.error OR
+												 fbPUSH_FROM_COLET2.eSTATE= E_STATE.error OR 
+														fbDRAWER.eSTATE= E_STATE.error OR
+															fbDRAWER_PUSHER.eSTATE= E_STATE.error OR
+												 					fbDRAWER_DOOR.eSTATE= E_STATE.error OR	
+																		fbPRESS1.eSTATE= E_STATE.error )THEN	
+																										
 																										 
 	iSTATION_STATE:=99;
 END_IF
 
 CASE iSTATION_STATE OF 
 	1://HOMING
-		fbPRESS1A.aHOME();
-		fbPRESS1B.aHOME();
 		eSTATE:=E_STATE.busy;
 		sSTATION_STATE:='HOMING';
+		fbPRESS1.aHOME();
+		fbLIFT.aHOME(); fbCOLET1.aHOME(); fbCOLET2.aHOME(); fbCOLET3.aHOME();fbCOLET4.aHOME();  
+		fbPUSH_FROM_COLET1.aHOME(); fbPUSH_FROM_COLET2.aHOME();fbDRAWER.aHOME(); fbDRAWER_PUSHER.aHOME(); fbDRAWER_DOOR.aHOME();
 		
-		IF fbPRESS1A.bHOMED AND fbPRESS1A.bHOMED THEN
+		IF fbPRESS1.bHOMED THEN
 			iSTATION_STATE:=100;
 			bHOMED:=TRUE;
 		END_IF
@@ -288,9 +286,10 @@ END_CASE]]></ST>
       <LineId Id="119" Count="0" />
       <LineId Id="139" Count="1" />
       <LineId Id="215" Count="1" />
-      <LineId Id="221" Count="5" />
+      <LineId Id="221" Count="3" />
       <LineId Id="218" Count="1" />
       <LineId Id="227" Count="0" />
+      <LineId Id="433" Count="0" />
       <LineId Id="322" Count="0" />
       <LineId Id="321" Count="0" />
       <LineId Id="141" Count="0" />
@@ -298,10 +297,10 @@ END_CASE]]></ST>
       <LineId Id="142" Count="0" />
       <LineId Id="21" Count="0" />
       <LineId Id="385" Count="0" />
-      <LineId Id="388" Count="1" />
-      <LineId Id="391" Count="0" />
-      <LineId Id="397" Count="0" />
-      <LineId Id="392" Count="0" />
+      <LineId Id="436" Count="1" />
+      <LineId Id="388" Count="0" />
+      <LineId Id="434" Count="0" />
+      <LineId Id="391" Count="1" />
       <LineId Id="394" Count="2" />
       <LineId Id="387" Count="0" />
       <LineId Id="386" Count="0" />

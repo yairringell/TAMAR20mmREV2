@@ -411,7 +411,7 @@ grp_separate();]]></ST>
                           <v n="LValue">false</v>
                           <v n="Boolean">false</v>
                           <v n="IsInstance">true</v>
-                          <v n="Id">56L</v>
+                          <v n="Id">88L</v>
                         </o>
                         <o n="OutputItems" t="OutputItemList">
                           <l2 n="OutputItems" />
@@ -539,8 +539,8 @@ grp_separate();]]></ST>
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"pSEPARATE1_PUSH"</v>
-                              <v n="Type">"FB_PISTON"</v>
+                              <v n="Operand">""</v>
+                              <n n="Type" />
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
                               <v n="Address">""</v>
@@ -552,9 +552,9 @@ grp_separate();]]></ST>
                               <v n="LValue">false</v>
                               <v n="Boolean">false</v>
                               <v n="IsInstance">false</v>
-                              <v n="Id">59L</v>
+                              <v n="Id">91L</v>
                             </o>
-                            <v n="Id">58L</v>
+                            <v n="Id">90L</v>
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
@@ -653,7 +653,7 @@ grp_separate();]]></ST>
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"pSEPARATE1_JACK1"</v>
+                              <v n="Operand">"pSEPARATE1_PUSHER_FROM_COLET1"</v>
                               <v n="Type">"FB_PISTON"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
@@ -666,13 +666,13 @@ grp_separate();]]></ST>
                               <v n="LValue">false</v>
                               <v n="Boolean">false</v>
                               <v n="IsInstance">false</v>
-                              <v n="Id">71L</v>
+                              <v n="Id">93L</v>
                             </o>
-                            <v n="Id">70L</v>
+                            <v n="Id">92L</v>
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"pSEPARATE1_JACK2"</v>
+                              <v n="Operand">"pSEPARATE1_PUSHER_FROM_COLET2"</v>
                               <v n="Type">"FB_PISTON"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
@@ -685,13 +685,13 @@ grp_separate();]]></ST>
                               <v n="LValue">false</v>
                               <v n="Boolean">false</v>
                               <v n="IsInstance">false</v>
-                              <v n="Id">73L</v>
+                              <v n="Id">95L</v>
                             </o>
-                            <v n="Id">72L</v>
+                            <v n="Id">94L</v>
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"pSEPARATE1_JACK3"</v>
+                              <v n="Operand">"pSEPARATE1_DRAWER"</v>
                               <v n="Type">"FB_PISTON"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
@@ -704,13 +704,13 @@ grp_separate();]]></ST>
                               <v n="LValue">false</v>
                               <v n="Boolean">false</v>
                               <v n="IsInstance">false</v>
-                              <v n="Id">75L</v>
+                              <v n="Id">97L</v>
                             </o>
-                            <v n="Id">74L</v>
+                            <v n="Id">96L</v>
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"pSEPARATE1_JACK4"</v>
+                              <v n="Operand">"pSEPARATE1_DRAWER_PUSHER"</v>
                               <v n="Type">"FB_PISTON"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
@@ -723,13 +723,13 @@ grp_separate();]]></ST>
                               <v n="LValue">false</v>
                               <v n="Boolean">false</v>
                               <v n="IsInstance">false</v>
-                              <v n="Id">77L</v>
+                              <v n="Id">99L</v>
                             </o>
-                            <v n="Id">76L</v>
+                            <v n="Id">98L</v>
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"pSEPARATE1_DRAWR"</v>
+                              <v n="Operand">"pSEPARATE1_DRAWER_DOOR"</v>
                               <v n="Type">"FB_PISTON"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
@@ -742,51 +742,13 @@ grp_separate();]]></ST>
                               <v n="LValue">false</v>
                               <v n="Boolean">false</v>
                               <v n="IsInstance">false</v>
-                              <v n="Id">79L</v>
+                              <v n="Id">101L</v>
                             </o>
-                            <v n="Id">78L</v>
+                            <v n="Id">100L</v>
                           </o>
                           <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"pSEPARATE1_PINS1"</v>
-                              <v n="Type">"FB_PISTON"</v>
-                              <v n="Comment">""</v>
-                              <v n="SymbolComment">""</v>
-                              <v n="Address">""</v>
-                              <o n="Flags" t="Flags">
-                                <v n="Flags">0</v>
-                                <v n="Fixed">false</v>
-                                <v n="Extensible">false</v>
-                              </o>
-                              <v n="LValue">false</v>
-                              <v n="Boolean">false</v>
-                              <v n="IsInstance">false</v>
-                              <v n="Id">81L</v>
-                            </o>
-                            <v n="Id">80L</v>
-                          </o>
-                          <o>
-                            <o n="Operand" t="Operand">
-                              <v n="Operand">"pSEPARATE1_PINS2"</v>
-                              <v n="Type">"FB_PISTON"</v>
-                              <v n="Comment">""</v>
-                              <v n="SymbolComment">""</v>
-                              <v n="Address">""</v>
-                              <o n="Flags" t="Flags">
-                                <v n="Flags">0</v>
-                                <v n="Fixed">false</v>
-                                <v n="Extensible">false</v>
-                              </o>
-                              <v n="LValue">false</v>
-                              <v n="Boolean">false</v>
-                              <v n="IsInstance">false</v>
-                              <v n="Id">83L</v>
-                            </o>
-                            <v n="Id">82L</v>
-                          </o>
-                          <o>
-                            <o n="Operand" t="Operand">
-                              <v n="Operand">"PRESS1A"</v>
+                              <v n="Operand">"aPRESS1"</v>
                               <v n="Type">"FB_Axis"</v>
                               <v n="Comment">""</v>
                               <v n="SymbolComment">""</v>
@@ -799,28 +761,9 @@ grp_separate();]]></ST>
                               <v n="LValue">false</v>
                               <v n="Boolean">false</v>
                               <v n="IsInstance">false</v>
-                              <v n="Id">85L</v>
+                              <v n="Id">103L</v>
                             </o>
-                            <v n="Id">84L</v>
-                          </o>
-                          <o>
-                            <o n="Operand" t="Operand">
-                              <v n="Operand">"PRESS1B"</v>
-                              <v n="Type">"FB_Axis"</v>
-                              <v n="Comment">""</v>
-                              <v n="SymbolComment">""</v>
-                              <v n="Address">""</v>
-                              <o n="Flags" t="Flags">
-                                <v n="Flags">0</v>
-                                <v n="Fixed">false</v>
-                                <v n="Extensible">false</v>
-                              </o>
-                              <v n="LValue">false</v>
-                              <v n="Boolean">false</v>
-                              <v n="IsInstance">false</v>
-                              <v n="Id">87L</v>
-                            </o>
-                            <v n="Id">86L</v>
+                            <v n="Id">102L</v>
                           </o>
                         </l2>
                         <o n="InputParam" t="ParamList">
@@ -831,21 +774,18 @@ grp_separate();]]></ST>
                             <v>bHOMED</v>
                             <v>tACTION</v>
                             <v>bPAUSE</v>
-                            <v>fbPUSH</v>
+                            <v>bHOME</v>
                             <v>fbLIFT</v>
                             <v>fbCOLET1</v>
                             <v>fbCOLET2</v>
                             <v>fbCOLET3</v>
                             <v>fbCOLET4</v>
-                            <v>fbJACK1</v>
-                            <v>fbJACK2</v>
-                            <v>fbJACK3</v>
-                            <v>fbJACK4</v>
-                            <v>fbDRAWR</v>
-                            <v>fbPINS1</v>
-                            <v>fbPINS2</v>
-                            <v>fbPRESS1A</v>
-                            <v>fbPRESS1B</v>
+                            <v>fbPUSH_FROM_COLET1</v>
+                            <v>fbPUSH_FROM_COLET2</v>
+                            <v>fbDRAWER</v>
+                            <v>fbDRAWER_PUSHER</v>
+                            <v>fbDRAWER_DOOR</v>
+                            <v>fbPRESS1</v>
                           </l2>
                           <l2 n="Types" cet="String">
                             <v>E_STATE</v>
@@ -854,6 +794,7 @@ grp_separate();]]></ST>
                             <v>BOOL</v>
                             <v>TON</v>
                             <v>BOOL</v>
+                            <v>BOOL</v>
                             <v>REFERENCE TO FB_PISTON</v>
                             <v>REFERENCE TO FB_PISTON</v>
                             <v>REFERENCE TO FB_PISTON</v>
@@ -864,10 +805,6 @@ grp_separate();]]></ST>
                             <v>REFERENCE TO FB_PISTON</v>
                             <v>REFERENCE TO FB_PISTON</v>
                             <v>REFERENCE TO FB_PISTON</v>
-                            <v>REFERENCE TO FB_PISTON</v>
-                            <v>REFERENCE TO FB_PISTON</v>
-                            <v>REFERENCE TO FB_PISTON</v>
-                            <v>REFERENCE TO FB_Axis</v>
                             <v>REFERENCE TO FB_Axis</v>
                           </l2>
                         </o>
@@ -881,7 +818,7 @@ grp_separate();]]></ST>
                         <n n="STSnippet" />
                         <v n="ContainsExtensibleInputs">false</v>
                         <v n="ProvidesSTSnippet">false</v>
-                        <v n="Id">57L</v>
+                        <v n="Id">89L</v>
                       </o>
                     </l2>
                     <l2 n="Connectors" />

@@ -2290,7 +2290,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{70F04D60-736E-4E14-8B4A-8BF70786744E}" Name="TAMAR2MM" PrjFilePath="TAMAR2MM\TAMAR2MM.plcproj" TmcFilePath="TAMAR2MM\TAMAR2MM.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="TAMAR2MM\TAMAR2MM.tmc" TmcHash="{8CBABDA6-458F-7F1B-2437-964983015CF2}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="TAMAR2MM\TAMAR2MM.tmc" TmcHash="{079D6B9C-0A41-CFB9-E43D-7AC93F9EF379}">
 					<Name>TAMAR2MM Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
