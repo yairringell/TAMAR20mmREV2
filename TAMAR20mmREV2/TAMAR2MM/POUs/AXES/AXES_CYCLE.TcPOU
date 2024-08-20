@@ -1863,7 +1863,7 @@ END_VAR
                       <o>
                         <v n="BoxType">"FB_Axis"</v>
                         <o n="Instance" t="Operand">
-                          <v n="Operand">"PRESS1A"</v>
+                          <v n="Operand">"aPRESS1"</v>
                           <v n="Type">"FB_Axis"</v>
                           <v n="Comment">""</v>
                           <v n="SymbolComment">""</v>
@@ -2779,7 +2779,7 @@ END_VAR
                       <o>
                         <v n="BoxType">"FB_Axis"</v>
                         <o n="Instance" t="Operand">
-                          <v n="Operand">"PRESS1B"</v>
+                          <v n="Operand">"aPRESS2"</v>
                           <v n="Type">"FB_Axis"</v>
                           <v n="Comment">""</v>
                           <v n="SymbolComment">""</v>

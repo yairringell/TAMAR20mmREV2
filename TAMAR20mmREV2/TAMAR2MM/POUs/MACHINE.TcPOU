@@ -6,9 +6,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF fbFEEDER.eSTATE= E_STATE.error OR fbSEPARATE1.eSTATE= E_STATE.error OR MAIN_CONV.eSTATE= E_STATE.error OR SUP_CONV.eSTATE= E_STATE.error THEN
-	iMAIN_STATE:=99 ;
-END_IF
+      <ST><![CDATA[aCHECK_FAULTS();
 
 IF bMAIN_RESET THEN
 	iMAIN_STATE:=98 ;
@@ -93,8 +91,24 @@ CASE iMAIN_STATE OF
 		
 END_CASE]]></ST>
     </Implementation>
+    <Action Name="aCHECK_FAULTS" Id="{6dc668d8-320a-443b-914b-8c393e3e989e}">
+      <Implementation>
+        <ST><![CDATA[
+
+IF fbFEEDER.eSTATE= E_STATE.error OR
+		 fbSEPARATE1.eSTATE= E_STATE.error OR
+		 	 fbSEPARATE2.eSTATE= E_STATE.error OR
+				 MAIN_CONV.eSTATE= E_STATE.error OR
+				 	 aPRESS1.eSTATE= E_STATE.error OR
+					 	aPRESS2.eSTATE= E_STATE.error OR
+						 
+								 SUP_CONV.eSTATE= E_STATE.error THEN
+	iMAIN_STATE:=99 ;
+END_IF
+]]></ST>
+      </Implementation>
+    </Action>
     <LineIds Name="MACHINE">
-      <LineId Id="114" Count="1" />
       <LineId Id="6" Count="4" />
       <LineId Id="96" Count="0" />
       <LineId Id="5" Count="0" />
@@ -131,6 +145,17 @@ END_CASE]]></ST>
       <LineId Id="89" Count="0" />
       <LineId Id="92" Count="2" />
       <LineId Id="11" Count="0" />
+    </LineIds>
+    <LineIds Name="MACHINE.aCHECK_FAULTS">
+      <LineId Id="2" Count="2" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="11" Count="2" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="1" Count="0" />
+      <LineId Id="6" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

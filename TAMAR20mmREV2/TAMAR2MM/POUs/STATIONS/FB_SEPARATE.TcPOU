@@ -14,7 +14,7 @@ VAR_INPUT
 	fbDRAWER:            REFERENCE TO FB_PISTON;
 	fbDRAWER_PUSHER:     REFERENCE TO FB_PISTON;
 	fbDRAWER_DOOR:       REFERENCE TO FB_PISTON;
-	fbPRESS1:            REFERENCE TO FB_Axis;
+	fbPRESS:            REFERENCE TO FB_Axis;
 	
 	
 END_VAR
@@ -40,7 +40,7 @@ IF iSTATION_STATE<>98 AND (fbLIFT.eSTATE= E_STATE.error OR
 														fbDRAWER.eSTATE= E_STATE.error OR
 															fbDRAWER_PUSHER.eSTATE= E_STATE.error OR
 												 					fbDRAWER_DOOR.eSTATE= E_STATE.error OR	
-																		fbPRESS1.eSTATE= E_STATE.error )THEN	
+																		fbPRESS.eSTATE= E_STATE.error )THEN	
 																										
 																										 
 	iSTATION_STATE:=99;
@@ -50,11 +50,11 @@ CASE iSTATION_STATE OF
 	1://HOMING
 		eSTATE:=E_STATE.busy;
 		sSTATION_STATE:='HOMING';
-		fbPRESS1.aHOME();
+		fbPRESS.aHOME();
 		fbLIFT.aHOME(); fbCOLET1.aHOME(); fbCOLET2.aHOME(); fbCOLET3.aHOME();fbCOLET4.aHOME();  
 		fbPUSH_FROM_COLET1.aHOME(); fbPUSH_FROM_COLET2.aHOME();fbDRAWER.aHOME(); fbDRAWER_PUSHER.aHOME(); fbDRAWER_DOOR.aHOME();
 		
-		IF fbPRESS1.bHOMED THEN
+		IF fbPRESS.bHOMED THEN
 			iSTATION_STATE:=100;
 			bHOMED:=TRUE;
 		END_IF
@@ -89,14 +89,13 @@ CASE iSTATION_STATE OF
 	6:	//SEPARATE A 
 		sSTATION_STATE:='SEPARATE A';
 		fbLIFT.aCLOSE();
-		fbPRESS1A.mMOVE_REL(1000);
-		fbPRESS1B.mMOVE_REL(1000);
+		fbPRESS.mMOVE_REL(1000);
 		
-		IF fbLIFT.eSTATE= E_STATE.busy AND fbPRESS1A.eSTATE= E_STATE.busy AND fbPRESS1B.eSTATE= E_STATE.busy THEN
+		IF fbLIFT.eSTATE= E_STATE.busy AND fbPRESS.eSTATE= E_STATE.busy THEN
 			iSTATION_STATE:=7;
 		END_IF
 	7:
-		IF  fbPRESS1A.eSTATE= E_STATE.ready AND fbPRESS1B.eSTATE= E_STATE.ready THEN
+		IF  fbPRESS.eSTATE= E_STATE.ready THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=8;
 			END_IF
@@ -117,14 +116,13 @@ CASE iSTATION_STATE OF
 		END_IF
 	10:	//SEPARATE A 
 		sSTATION_STATE:='SEPARATE B';
-		fbPRESS1A.mMOVE_REL(1000);
-		fbPRESS1B.mMOVE_REL(1000);
+		fbPRESS.mMOVE_REL(1000);
 		
-		IF fbPRESS1A.eSTATE= E_STATE.busy AND fbPRESS1B.eSTATE= E_STATE.busy THEN
+		IF fbPRESS.eSTATE= E_STATE.busy  THEN
 			iSTATION_STATE:=11;
 		END_IF
 	11:
-		IF  fbLIFT.eSTATE= E_STATE.ready AND fbPRESS1A.eSTATE= E_STATE.ready AND fbPRESS1B.eSTATE= E_STATE.ready THEN
+		IF  fbLIFT.eSTATE= E_STATE.ready AND fbPRESS.eSTATE= E_STATE.ready  THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=12;
 			END_IF
@@ -133,12 +131,12 @@ CASE iSTATION_STATE OF
 		//========================================================================== CLEARING =======================
 	12:	
 		sSTATION_STATE:='OPEN DRAWER';
-		fbDRAWR.aOPEN();
-		IF fbDRAWR.eSTATE= E_STATE.busy  THEN
+		fbDRAWER.aOPEN();
+		IF fbDRAWER.eSTATE= E_STATE.busy  THEN
 			iSTATION_STATE:=13;
 		END_IF
 	13:
-		IF fbDRAWR.eSTATE= E_STATE.ready THEN
+		IF fbDRAWER.eSTATE= E_STATE.ready THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=14;
 			END_IF
@@ -160,53 +158,52 @@ CASE iSTATION_STATE OF
 		END_IF	
 	16:	//press pins
 		sSTATION_STATE:='PINS OUT';
-		fbPINS1.aOPEN();
-		fbPINS2.aOPEN();
-		IF fbPINS1.eSTATE= E_STATE.busy AND fbPINS2.eSTATE= E_STATE.busy THEN
+		fbPUSH_FROM_COLET1.aOPEN();
+		fbPUSH_FROM_COLET2.aOPEN();
+		IF fbPUSH_FROM_COLET1.eSTATE= E_STATE.busy AND fbPUSH_FROM_COLET2.eSTATE= E_STATE.busy THEN
 			iSTATION_STATE:=17;
 		END_IF
 	17:
-		IF fbPINS1.eSTATE= E_STATE.ready AND fbPINS2.eSTATE= E_STATE.ready THEN
+		IF fbPUSH_FROM_COLET1.eSTATE= E_STATE.ready AND fbPUSH_FROM_COLET2.eSTATE= E_STATE.ready THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=18;
 			END_IF
 		END_IF
 	18:	//pins up and push
 		sSTATION_STATE:='PINS UP AND PUSH';
-		fbPINS1.aCLOSE();
-		fbPINS2.aCLOSE();
-		fbPUSH.aOPEN();
-		IF fbPUSH.eSTATE= E_STATE.busy AND fbPINS1.eSTATE= E_STATE.busy AND fbPINS2.eSTATE= E_STATE.busy THEN
+		fbPUSH_FROM_COLET1.aCLOSE();
+		fbPUSH_FROM_COLET2.aCLOSE();
+		fbDRAWER_PUSHER.aOPEN();
+		IF fbDRAWER_PUSHER.eSTATE= E_STATE.busy AND fbPUSH_FROM_COLET1.eSTATE= E_STATE.busy AND fbPUSH_FROM_COLET2.eSTATE= E_STATE.busy THEN
 			iSTATION_STATE:=19;
 		END_IF
 	19:
-		IF  fbPUSH.eSTATE= E_STATE.ready AND fbPINS1.eSTATE= E_STATE.ready AND fbPINS2.eSTATE= E_STATE.ready THEN
+		IF  fbDRAWER_PUSHER.eSTATE= E_STATE.ready AND fbPUSH_FROM_COLET1.eSTATE= E_STATE.ready AND fbPUSH_FROM_COLET2.eSTATE= E_STATE.ready THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=20;
 			END_IF
 		END_IF
 	20:	//close drawer jacks down
 		sSTATION_STATE:='CLOSE DRAWER JACKS DOWN';
-		fbDRAWR.aCLOSE();
-		fbPRESS1A.aHOME();
-		fbPRESS1B.aHOME();
-		IF fbDRAWR.eSTATE= E_STATE.busy  THEN
+		fbDRAWER.aCLOSE();
+		fbPRESS.aHOME();
+		IF fbDRAWER.eSTATE= E_STATE.busy  THEN
 			iSTATION_STATE:=21;
 		END_IF
 	21:
-		IF  fbLIFT.eSTATE= E_STATE.ready AND fbDRAWR.eSTATE= E_STATE.ready AND fbPRESS1A.bHOMED AND fbPRESS1B.bHOMED THEN
+		IF  fbLIFT.eSTATE= E_STATE.ready AND fbDRAWER.eSTATE= E_STATE.ready AND fbPRESS.bHOMED  THEN
 			IF NOT bPAUSE THEN
 				iSTATION_STATE:=22;
 			END_IF
 		END_IF
 	22://close push
-		fbPUSH.aCLOSE();
+		fbDRAWER_PUSHER.aCLOSE();
 		sSTATION_STATE:='CLOSE PUSH';
-		IF fbPUSH.eSTATE= E_STATE.busy THEN
+		IF fbDRAWER_PUSHER.eSTATE= E_STATE.busy THEN
 			iSTATION_STATE:=23;
 		END_IF
 	23:
-		IF fbPUSH.eSTATE= E_STATE.ready THEN
+		IF fbDRAWER_PUSHER.eSTATE= E_STATE.ready THEN
 			iSTATION_STATE:=100;
 		END_IF
 		
@@ -215,33 +212,30 @@ CASE iSTATION_STATE OF
 		eSTATE:=E_STATE.uninit;
 		sSTATION_STATE:='UNINIT';
 		bRESET:=FALSE;
-		fbPUSH.aRESET();
+		fbDRAWER_PUSHER.aRESET();
 		fbLIFT.aRESET();
 		fbCOLET1.aRESET();
 		fbCOLET2.aRESET();
 		fbCOLET3.aRESET();
 		fbCOLET4.aRESET();
-		fbJACK1.aRESET();
-		fbJACK2.aRESET();
-		fbJACK3.aRESET();
-		fbJACK4.aRESET();
-		fbDRAWR.aRESET();
-		fbPINS1.aRESET();
-		fbPINS2.aRESET();
+		fbPUSH_FROM_COLET1.aRESET();
+		fbPUSH_FROM_COLET2.aRESET();
+		fbDRAWER.aRESET();
+		fbDRAWER_PUSHER.aRESET();
+		fbDRAWER_DOOR.aRESET();
 		
 		IF  fbLIFT.eSTATE= E_STATE.uninit AND
 				 fbCOLET1.eSTATE= E_STATE.uninit AND
 					fbCOLET2.eSTATE= E_STATE.uninit AND
 						fbCOLET3.eSTATE= E_STATE.uninit AND
 							fbCOLET4.eSTATE= E_STATE.uninit AND
-								fbJACK1.eSTATE= E_STATE.uninit AND
-									 fbJACK2.eSTATE= E_STATE.uninit AND 
-										fbJACK3.eSTATE= E_STATE.uninit AND
-											fbJACK4.eSTATE= E_STATE.uninit AND 
-												fbDRAWR.eSTATE= E_STATE.uninit AND
-													fbPINS1.eSTATE= E_STATE.uninit AND
-									 					fbPINS2.eSTATE= E_STATE.uninit AND
-															fbPUSH.eSTATE= E_STATE.uninit THEN
+								fbPUSH_FROM_COLET1.eSTATE= E_STATE.uninit AND
+									 fbPUSH_FROM_COLET2.eSTATE= E_STATE.uninit AND 
+										
+												fbDRAWER.eSTATE= E_STATE.uninit AND
+													fbDRAWER_PUSHER.eSTATE= E_STATE.uninit AND
+									 					fbDRAWER_DOOR.eSTATE= E_STATE.uninit THEN
+														
 			iSTATION_STATE:=980;
 		END_IF
 	980: 
@@ -250,14 +244,13 @@ CASE iSTATION_STATE OF
 				fbCOLET2.eSTATE= E_STATE.ready AND
 					fbCOLET3.eSTATE= E_STATE.ready AND
 						fbCOLET4.eSTATE= E_STATE.ready AND
-							fbJACK1.eSTATE= E_STATE.ready AND
-								fbJACK2.eSTATE= E_STATE.ready AND 
-									fbJACK3.eSTATE= E_STATE.ready AND
-										fbJACK4.eSTATE= E_STATE.ready AND 
-											fbDRAWR.eSTATE= E_STATE.ready AND
-												fbPINS1.eSTATE= E_STATE.ready AND
-													fbPINS2.eSTATE= E_STATE.ready AND
-														fbPUSH.eSTATE= E_STATE.ready THEN
+							fbPUSH_FROM_COLET1.eSTATE= E_STATE.ready AND
+								fbPUSH_FROM_COLET2.eSTATE= E_STATE.ready AND 
+									
+											fbDRAWER.eSTATE= E_STATE.ready AND
+												fbDRAWER_PUSHER.eSTATE= E_STATE.ready AND
+													fbDRAWER_DOOR.eSTATE= E_STATE.ready THEN
+														
 			IF bHOME THEN
 				
 				iSTATION_STATE:=1;
@@ -313,11 +306,11 @@ END_CASE]]></ST>
       <LineId Id="53" Count="2" />
       <LineId Id="234" Count="0" />
       <LineId Id="236" Count="0" />
-      <LineId Id="235" Count="0" />
       <LineId Id="56" Count="8" />
       <LineId Id="237" Count="0" />
       <LineId Id="240" Count="14" />
-      <LineId Id="256" Count="10" />
+      <LineId Id="256" Count="1" />
+      <LineId Id="259" Count="7" />
       <LineId Id="238" Count="1" />
       <LineId Id="181" Count="0" />
       <LineId Id="157" Count="10" />
@@ -335,7 +328,6 @@ END_CASE]]></ST>
       <LineId Id="275" Count="7" />
       <LineId Id="193" Count="0" />
       <LineId Id="286" Count="3" />
-      <LineId Id="301" Count="0" />
       <LineId Id="291" Count="7" />
       <LineId Id="283" Count="0" />
       <LineId Id="300" Count="0" />
@@ -349,15 +341,18 @@ END_CASE]]></ST>
       <LineId Id="69" Count="0" />
       <LineId Id="399" Count="0" />
       <LineId Id="70" Count="2" />
-      <LineId Id="304" Count="11" />
+      <LineId Id="304" Count="7" />
+      <LineId Id="314" Count="1" />
       <LineId Id="75" Count="0" />
       <LineId Id="316" Count="0" />
       <LineId Id="377" Count="0" />
-      <LineId Id="325" Count="10" />
+      <LineId Id="325" Count="6" />
+      <LineId Id="333" Count="2" />
       <LineId Id="323" Count="0" />
       <LineId Id="77" Count="1" />
       <LineId Id="375" Count="1" />
-      <LineId Id="339" Count="10" />
+      <LineId Id="339" Count="6" />
+      <LineId Id="347" Count="2" />
       <LineId Id="382" Count="0" />
       <LineId Id="384" Count="0" />
       <LineId Id="398" Count="0" />
