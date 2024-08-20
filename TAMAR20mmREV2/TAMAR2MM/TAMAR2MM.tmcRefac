@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Refactors>
+  <Renames>
+    <RenamedType>
+      <Type guid="148f31b8-f6af-4b5f-9825-594f26f678d0">GRP_FEEDER_1</Type>
+      <From>grp_feeder_1</From>
+      <To>grp_verification</To>
+    </RenamedType>
+    <RenamedType>
+      <Type guid="d5d29979-352f-4ca8-aedb-7d87748d57a9">GRP_VERIFICATION_1</Type>
+      <From>grp_verification_1</From>
+      <To>grp_cleaner</To>
+    </RenamedType>
+    <RenamedType>
+      <Type guid="057f9242-1858-437a-bf95-27a446b53c38">GRP_CLEANER_1</Type>
+      <From>grp_cleaner_1</From>
+      <To>grp_release</To>
+    </RenamedType>
+  </Renames>
+</Refactors>
